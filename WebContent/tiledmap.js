@@ -1,13 +1,13 @@
 /**@
 * #TiledMapBuilder
 * @category Graphics
-* Tool for creating tiled map
+* A Tiled map (http://mapeditor.org) importer for Crafty.js ( http://craftyjs.com)
 * @trigger WorldCreated - WorldCreated - when world is done.
 * It builds a tiled map on the basis of exported JSON file from Tiled Map Editor.
 * It also provides methods to access to tiles. 
 * @example
 * ~~~
-* Crafty.e("2D, DOM, TiledMap")
+* Crafty.e("2D, DOM, TiledMapBuilder")
 * 	.load( tiledMapEditorSourceObject )
 * 	.bind("TiledMapLoaded", function(){
 * 		this.createWorld()
