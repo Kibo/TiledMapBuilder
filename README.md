@@ -15,7 +15,7 @@ Crafty.e("2D, DOM, TiledMap")
     })
 ```
 
-Get all tiled from layer
+Get all tiles from layer
 ```
 var tiles = TiledMapBuilder.getTiles( layer )
 ```
