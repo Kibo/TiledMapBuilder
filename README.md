@@ -4,7 +4,7 @@ Module for [Crafty HTML5 game engine](http://craftyjs.com/ "Crafty HTML5 game en
 
 It builds a tiled map on the basis of exported JSON file from [Tiled Map Editor](http://www.mapeditor.org/ "Tiled Map Editor"). It also provides methods to access to tiles.
 
-**Usage:**
+###Usage:
 
 Build a map
 ```
@@ -25,7 +25,7 @@ Get the tile
 var tile = TiledMapBuilder.getTile( layer, row, column )
 ```
 
-**Advantage:**
+###Advantage:
 - does not depend on jQuery
 - well documented
 - tested
