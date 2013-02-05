@@ -1,0 +1,65 @@
+{ "height":10,
+ "layers":[
+        {
+         "data":[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+         "height":10,
+         "name":"ground",
+         "opacity":1,
+         "type":"tilelayer",
+         "visible":true,
+         "width":10,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "data":[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0],
+         "height":10,
+         "name":"obstacles",
+         "opacity":1,
+         "type":"tilelayer",
+         "visible":true,
+         "width":10,
+         "x":0,
+         "y":0
+        }],
+ "orientation":"orthogonal",
+ "properties":
+    {
+
+    },
+ "tileheight":32,
+ "tilesets":[
+        {
+         "firstgid":1,
+         "image":"../img/ground.png",
+         "imageheight":32,
+         "imagewidth":96,
+         "margin":0,
+         "name":"ground",
+         "properties":
+            {
+
+            },
+         "spacing":0,
+         "tileheight":32,
+         "tilewidth":32
+        }, 
+        {
+         "firstgid":4,
+         "image":"../img/buckets.png",
+         "imageheight":64,
+         "imagewidth":96,
+         "margin":0,
+         "name":"buckets",
+         "properties":
+            {
+
+            },
+         "spacing":0,
+         "tileheight":32,
+         "tilewidth":32
+        }],
+ "tilewidth":32,
+ "version":1,
+ "width":10
+}

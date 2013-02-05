@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	 	<meta charset="utf-8">
+		<script src="http://code.jquery.com/jquery-latest.js"></script>
+		<link rel="stylesheet" href="http://code.jquery.com/qunit/git/qunit.css" type="text/css" media="screen" />
+		<script type="text/javascript" src="http://code.jquery.com/qunit/git/qunit.js"></script>							
+		<script src="../example/js/crafty.js"></script>
+		<script src="../tiledmap.js"></script>
+		<script>
+		window.onload = function() {
+			
+			var empty;
+			var broken = {width:10, height:10, layers:[], tilesets:[]}
+			var valid = {width:10, height:10, layers:[{}], tilesets:[{}]}
+						
+			var layer0 = { name:'layer0', tiles:[[0,1], [2,3]] }
+			var layer1 = { name:'layer1', tiles:[[4,5], [6,7]] }
+			var layers = [layer0, layer1 ];
+								
+			Crafty.init(320, 320);
+						
+			test("getRenderMethod", function() {														
+				equal( Crafty.e("2D, TiledMapBuilder").getRenderMethod() , "DOM", "Default is DOM.");
+				equal( Crafty.e("2D, DOM, TiledMapBuilder").getRenderMethod() , "DOM", "Entity has DOM component.");
+				equal( Crafty.e("2D, Canvas, TiledMapBuilder").getRenderMethod() , "Canvas", "Entity has Canvas component.");
+			});
+			
+			test("isValid", function() {									
+				equal( Crafty.e("2D, DOM, TiledMapBuilder").isValid( empty ), false, "Empty source");
+				equal( Crafty.e("2D, DOM, TiledMapBuilder").isValid( broken ), false, "Broken source");
+				ok( Crafty.e("2D, DOM, TiledMapBuilder").isValid( valid ), "Valid source");
+			});
+			
+			test("load", function() {												
+				//throws( Crafty.e("2D, DOM, TiledMapBuilder").load( empty ), "Empty source");
+				//throws( Crafty.e("2D, DOM, TiledMapBuilder").load( broken ), "Broken source");								
+				equal( Crafty.e("2D, DOM, TiledMapBuilder").load( valid ).getSource(), valid, "Valid source");
+			});
+			
+			test("getTiles", function() {												
+				var map = Crafty.e("2D, DOM, TiledMapBuilder")
+				map._layers = layers;
+								
+				equal( map.getTiles(0).name , layers[0].name, "Layer0");
+				equal( map.getTiles(1).name , layers[1].name, "Layer1");			
+				equal( map.getTiles(2) , null , "Null");
+			});
+			
+			test("getTile", function() {												
+				var map = Crafty.e("2D, DOM, TiledMapBuilder")
+				map._layers = layers;
+								
+				equal( map.getTile(0, 1 , 1) , layers[0].tiles[1][1]);
+				equal( map.getTile(1, 0 , 1) , layers[1].tiles[0][1]);			
+				
+				equal( map.getTile(3, 0 , 1) , null);
+				equal( map.getTile(1, 10 , 1) , null);
+				equal( map.getTile(1, 1 , 10) , null);
+			});
+																							
+		} // onload
+		</script>				
+	</head>
+	<body>
+		<h1 id="qunit-header">Crafty: Stage</h1>
+		<h2 id="qunit-banner"></h2>
+		<div id="qunit-testrunner-toolbar"></div>
+		<h2 id="qunit-userAgent"></h2>
+		<ol id="qunit-tests"></ol>
+		<div id="qunit-fixture">test markup, will be hidden</div>
+	</body>
+</html>

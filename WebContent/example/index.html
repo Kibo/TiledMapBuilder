@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Crafty</title>
+    <style>
+    body, html { margin:0; padding: 0; overflow:hidden; font-family:Arial; font-size:20px }
+    #cr-stage { border:2px solid black; margin:5px auto; color:white }
+    </style>  
+  </head>
+  <body>
+    
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script src="js/crafty.js"></script>
+    <script src="../tiledmap.js"></script>    
+	<script>
+  		window.onload = function() {
+  			  			
+  			var MAP = { "height":10,
+  					 "layers":[
+  					         {
+  					          "data":[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+  					          "height":10,
+  					          "name":"ground",
+  					          "opacity":1,
+  					          "type":"tilelayer",
+  					          "visible":true,
+  					          "width":10,
+  					          "x":0,
+  					          "y":0
+  					         }, 
+  					         {
+  					          "data":[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0],
+  					          "height":10,
+  					          "name":"obstacles",
+  					          "opacity":1,
+  					          "type":"tilelayer",
+  					          "visible":true,
+  					          "width":10,
+  					          "x":0,
+  					          "y":0
+  					         }],
+  					  "orientation":"orthogonal",
+  					  "properties":
+  					     {
+
+  					     },
+  					  "tileheight":32,
+  					  "tilesets":[
+  					         {
+  					          "firstgid":1,
+  					          "image":"../img/ground.png",
+  					          "imageheight":32,
+  					          "imagewidth":96,
+  					          "margin":0,
+  					          "name":"ground",
+  					          "properties":
+  					             {
+
+  					             },
+  					          "spacing":0,
+  					          "tileheight":32,
+  					          "tilewidth":32
+  					         }, 
+  					         {
+  					          "firstgid":4,
+  					          "image":"../img/buckets.png",
+  					          "imageheight":64,
+  					          "imagewidth":96,
+  					          "margin":0,
+  					          "name":"buckets",
+  					          "properties":
+  					             {
+
+  					             },
+  					          "spacing":0,
+  					          "tileheight":32,
+  					          "tilewidth":32
+  					         }],
+  					  "tilewidth":32,
+  					  "version":1,
+  					  "width":10
+  					 }	  		   
+  			  			  			  			  		  			
+  			Crafty.init(320, 320);
+  			Crafty.background("green");
+  			
+  			Crafty.scene("Load", function() {
+
+  				 Crafty.load([
+  				              "img/ground.png",
+  				              "img/buckets.png" 
+  				             ], function() {
+  					 
+  						Crafty.scene("Main");		
+  					});  				
+  			});
+  			
+  			Crafty.scene("Load");
+  			  			  		
+			Crafty.scene("Main", function () {
+  				
+				var mapka = Crafty.e("2D, DOM, TiledMap")
+							.setSource( MAP )
+							.createWorld()
+							.bind("WorldCreated", function(){
+								console.log("done");
+							})
+												
+				Crafty.e("2D, DOM, Color, Fourway")
+  			   		.attr({x: 0, y: 0, z: 100, w:20, h:20})  
+  			   		.color("#000000")
+  			   		.fourway(1)  			   						  			 			  		   	  				
+  			});  			  													
+  	}	
+	</script>	
+  </body>
+</html>
