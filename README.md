@@ -27,7 +27,7 @@ var tile = TiledMapBuilder.getTile( layer, row, column )
 
 ###Advantage:
 - does not depend on jQuery
-- well documented
+- documented
 - tested
 
 
