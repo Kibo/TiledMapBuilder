@@ -1,4 +1,4 @@
-# TiledMapBulder v0.3.1
+# TiledMapBulder v0.3
 
 Module for [Crafty HTML5 game engine](http://craftyjs.com/ "Crafty HTML5 game engine").
 
@@ -6,12 +6,23 @@ It builds a tiled map on the basis of exported JSON file from [Tiled Map Editor]
 
 **Usage:**
 
+Build a map
 ```
 Crafty.e("2D, DOM, TiledMap")
     .load( tiledMapEditorSourceObject )
     .bind("TiledMapLoaded", function(){
 	this.createWorld()
     })
+```
+
+Get all tiled from layer
+```
+var tiles = TiledMapBuilder.getTiles( layer )
+```
+
+Get the tile
+```
+var tile = TiledMapBuilder.getTile( layer, row, column )
 ```
 
 **Advantage:**
