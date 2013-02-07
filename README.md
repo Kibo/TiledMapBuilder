@@ -23,13 +23,13 @@ Build a tiled map
 ```
 Crafty.e("2D, DOM, TiledMapBuilder").createWorld( SOURCE_FROM_TILED_MAP_EDITOR )    
 ```
-or
+or with callback
 
 ```
 Crafty.e("2D, DOM, TiledMapBuilder")
 	.createWorld( SOURCE_FROM_TILED_MAP_EDITOR, function( map ){
 		console.log("done");
-	} )    
+	});    
 ```
 
 Get all entities from layer
@@ -44,9 +44,8 @@ var tile = TiledMapBuilder.getTile( layerName, row, column );
 
 ###Advantage:
 - no depending on the third party library
-- [documented code](https://github.com/Kibo/TiledMapBuilder/blob/master/WebContent/tiledmap.js)
-- [tested](https://github.com/Kibo/TiledMapBuilder/blob/master/WebContent/test/tests.html)
-- [example code](https://github.com/Kibo/TiledMapBuilder/blob/master/WebContent/example/index.html)
+- [documented code](https://github.com/Kibo/TiledMapBuilder/blob/master/WebContent/tiledmapbuilder.js)
+- [tested code](https://github.com/Kibo/TiledMapBuilder/blob/master/WebContent/test/tests.html)
 - [demo](#)
 
 
