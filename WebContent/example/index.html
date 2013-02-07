@@ -21,9 +21,14 @@
   				//Preload sprites first
   				 Crafty.load([
   				              "img/ground.png",
-  				              "img/obstacles.png" 
+  				              "img/obstacles.png",
+  				              "img/ogre.png" 
   				             ], function() {
   					 
+  					 Crafty.sprite(50,67,"img/ogre.png", {
+  						 Ogre:[0,0]
+  					 }); 
+  					 					   					   					
   						Crafty.scene("Main");		
   					});  				
   			});
@@ -50,24 +55,57 @@
 					
 					//Head
 					for (var head = 0; head < tiledmap.getLayer('head').length; head++){
-						tiledmap.getLayer('head')[head].z = 1000; 																		
+						tiledmap.getLayer('head')[head]
+						.addComponent("Collision, Head")
+						.collision();																		
 					}
 																		
 				});
 				
 				//Player
-				Crafty.e("2D, DOM, Color, Fourway, Player, Collision")
-  			   		.attr({x: 150, y: 100, z: 100, w:30, h:30})  
-  			   		.color("red")
+				Crafty.e("2D, DOM, Fourway, SpriteAnimation, Ogre, Collision")
+  			   		.attr({x: 150, y: 50, z: 100}) 
+  			   		.animate("walk_left", 0, 1, 3)
+  			   		.animate("walk_right", 0, 2, 3)	
+  			   		.animate("walk_up", 0, 3, 3)	
+  			   		.animate("walk_down", 0, 0, 3)	
   			   		.fourway(3)  			   					
-  			   		.collision()
+  			   		.collision( new Crafty.polygon([10,60],[40,60],[40,65],[10,65]) )
   			   		.bind('Moved', function(from) {
 						if(this.hit('Obstacle') || 
 						   this.hit('Fence') ){
 							this.attr({x: from.x, y:from.y});
-						}
-					});
-  			   		
+						}									
+					})
+					.onHit("Head", function( obj ){
+						
+						//Don´t like it? Please contact Crafty administrators
+						var headTile = obj[0].obj;
+						
+						//TODO
+					})									
+					.bind("NewDirection",
+					    function (direction) {
+					        if (direction.x < 0) {
+					            if (!this.isPlaying("walk_left"))
+					                this.stop().animate("walk_left", 10, -1);
+					        }
+					        if (direction.x > 0) {
+					            if (!this.isPlaying("walk_right"))
+					                this.stop().animate("walk_right", 10, -1);
+					        }
+					        if (direction.y < 0) {
+					            if (!this.isPlaying("walk_up"))
+					                this.stop().animate("walk_up", 10, -1);
+					        }
+					        if (direction.y > 0) {
+					            if (!this.isPlaying("walk_down"))
+					                this.stop().animate("walk_down", 10, -1);
+					        }
+					        if(!direction.x && !direction.y) {
+					            this.stop();
+					        }
+					})  			   		
   			});  			  													
   	}	
 	</script>	
