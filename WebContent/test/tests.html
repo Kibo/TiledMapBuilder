@@ -6,6 +6,7 @@
 		<link rel="stylesheet" href="http://code.jquery.com/qunit/git/qunit.css" type="text/css" media="screen" />
 		<script type="text/javascript" src="http://code.jquery.com/qunit/git/qunit.js"></script>							
 		<script src="../example/js/crafty.js"></script>
+		<script src="../example/js/source.js"></script>
 		<script src="../tiledmap.js"></script>
 		<script>
 		window.onload = function() {
@@ -104,93 +105,7 @@
 			
 //-- SOURCE DATA----------------------------------------------
 			function getSource(){
-				return { "height":10,
-					 "layers":[
-					           {
-					            "data":[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
-					            "height":10,
-					            "name":"groud",
-					            "opacity":1,
-					            "type":"tilelayer",
-					            "visible":true,
-					            "width":10,
-					            "x":0,
-					            "y":0
-					           }, 
-					           {
-					            "data":[28, 28, 28, 28, 0, 0, 28, 28, 28, 28, 28, 0, 0, 0, 0, 0, 0, 0, 0, 28, 28, 0, 0, 0, 0, 0, 0, 0, 0, 28, 28, 0, 0, 0, 0, 0, 0, 0, 0, 28, 28, 0, 0, 0, 0, 0, 0, 0, 0, 28, 28, 0, 0, 0, 0, 0, 0, 0, 0, 28, 28, 0, 0, 0, 0, 0, 0, 0, 0, 28, 28, 0, 0, 0, 0, 0, 0, 0, 0, 28, 28, 0, 0, 0, 0, 0, 0, 0, 0, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28],
-					            "height":10,
-					            "name":"fence",
-					            "opacity":1,
-					            "type":"tilelayer",
-					            "visible":true,
-					            "width":10,
-					            "x":0,
-					            "y":0
-					           }, 
-					           {
-					            "data":[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 4, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 84, 85, 0, 84, 85, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-					            "height":10,
-					            "name":"obstacles",
-					            "opacity":1,
-					            "type":"tilelayer",
-					            "visible":true,
-					            "width":10,
-					            "x":0,
-					            "y":0
-					           }, 
-					           {
-					            "data":[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 68, 69, 0, 68, 69, 0, 0, 0, 0, 0, 76, 77, 0, 76, 77, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-					            "height":10,
-					            "name":"head",
-					            "opacity":1,
-					            "type":"tilelayer",
-					            "visible":true,
-					            "width":10,
-					            "x":0,
-					            "y":0
-					           }],
-					    "orientation":"orthogonal",
-					    "properties":
-					       {
-
-					       },
-					    "tileheight":32,
-					    "tilesets":[
-					           {
-					            "firstgid":1,
-					            "image":"..\/example\/img\/ground.png",
-					            "imageheight":32,
-					            "imagewidth":96,
-					            "margin":0,
-					            "name":"ground",
-					            "properties":
-					               {
-
-					               },
-					            "spacing":0,
-					            "tileheight":32,
-					            "tilewidth":32
-					           }, 
-					           {
-					            "firstgid":4,
-					            "image":"..\/example\/img\/obstacles.png",
-					            "imageheight":416,
-					            "imagewidth":256,
-					            "margin":0,
-					            "name":"obstacles",
-					            "properties":
-					               {
-
-					               },
-					            "spacing":0,
-					            "tileheight":32,
-					            "tilewidth":32
-					           }],
-					    "tilewidth":32,
-					    "version":1,
-					    "width":10
-					   };			
+				return SOURCE_FROM_TILED_MAP_EDITOR;			
 			}																																
 		} // onload
 		</script>				
