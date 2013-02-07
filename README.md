@@ -12,7 +12,7 @@ A Tiled map (http://mapeditor.org) importer for Crafty.js (http://craftyjs.com)
 
 ![Tiled Map Editor](https://raw.github.com/Kibo/TiledMapBuilder/master/WebContent/example/img/export.png)
 
-3) Use [Crafty.js](http://craftyjs.com) for building your amazing HTML5 game (see [demo](#)).
+3) Use [Crafty.js](http://craftyjs.com) for building your amazing HTML5 game (see [demo](http://crafty.kibo.cz/tiled2Demo/example/)).
 
 ![Crafty HTML5 game](https://raw.github.com/Kibo/TiledMapBuilder/master/WebContent/example/img/game.png)
 
@@ -46,7 +46,7 @@ var tile = TiledMapBuilder.getTile( layerName, row, column );
 - no depending on the third party library
 - [documented code](https://github.com/Kibo/TiledMapBuilder/blob/master/WebContent/tiledmapbuilder.js)
 - [tested code](https://github.com/Kibo/TiledMapBuilder/blob/master/WebContent/test/tests.html)
-- [demo](#)
+- [demo](http://crafty.kibo.cz/tiled2Demo/example/)
 
 
 **Contact me**
