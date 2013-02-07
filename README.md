@@ -21,7 +21,7 @@ A Tiled map (http://mapeditor.org) importer for Crafty.js (http://craftyjs.com)
 
 Build a tiled map
 ```
-Crafty.e("2D, DOM, TiledMapBuilder").createWorld( SOURCE_FROM_TILED_MAP_EDITOR )    
+Crafty.e("2D, DOM, TiledMapBuilder").createWorld( SOURCE_FROM_TILED_MAP_EDITOR );    
 ```
 or with callback
 
