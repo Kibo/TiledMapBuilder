@@ -4,15 +4,15 @@ A Tiled map (http://mapeditor.org) importer for Crafty.js (http://craftyjs.com)
 
 ###Work procedure:
 
-1. Create tiled map in [Tiled map editor](http://mapeditor.org)
+1) Create tiled map in [Tiled map editor](http://mapeditor.org)
 
 ![Tiled Map Editor](https://raw.github.com/Kibo/TiledMapBuilder/master/WebContent/example/img/editor.png)
 
-2. Export your tiled map as JSON
+2) Export your tiled map as JSON
 
 ![Tiled Map Editor](https://raw.github.com/Kibo/TiledMapBuilder/master/WebContent/example/img/export.png)
 
-3. Use [Crafty.js](http://craftyjs.com) for building your first HTML5 game.
+3) Use [Crafty.js](http://craftyjs.com) for building your first HTML5 game.
 
 ![Crafty HTML5 game](https://raw.github.com/Kibo/TiledMapBuilder/master/WebContent/example/img/game.png)
 
