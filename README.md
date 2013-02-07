@@ -5,32 +5,38 @@ A Tiled map (http://mapeditor.org) importer for Crafty.js ( http://craftyjs.com)
 
 ###Usage:
 
-Build a map
+Build a tiled map
+```
+Crafty.e("2D, DOM, TiledMapBuilder").createWorld( SOURCE_FROM_TILED_MAP_EDITOR )    
+```
+or
+
 ```
 Crafty.e("2D, DOM, TiledMapBuilder")
-    .load( tiledMapEditorSourceObject )
-    .bind("TiledMapLoaded", function(){
-	this.createWorld()
-    })
+	.createWorld( SOURCE_FROM_TILED_MAP_EDITOR, function( tiled ){
+		console.log("done");
+	} )    
 ```
 
-Get all tiles from layer
+Get all entities from layer
 ```
-var tiles = TiledMapBuilder.getTiles( layer )
+var entities = TiledMapBuilder.getLayer( layerName );
 ```
 
 Get the tile
 ```
-var tile = TiledMapBuilder.getTile( layer, row, column )
+var tile = TiledMapBuilder.getTile( layerName, row, column );
 ```
 
 ###Advantage:
-- does not depend on jQuery
+- no depending on the third party library
 - documented
 - tested
 
 
 **Contact me**
+
+[Crafty group thread](#) TODO
 
 I will be grateful for the constructive comments.
 - tomasjurman@gmail.com

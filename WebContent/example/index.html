@@ -10,86 +10,18 @@
   </head>
   <body>
     
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
     <script src="js/crafty.js"></script>
+    <script src="js/source.js"></script> 
     <script src="../tiledmap.js"></script>    
 	<script>
-  		window.onload = function() {
-  			  			
-  			var MAP = { "height":10,
-  					 "layers":[
-  					         {
-  					          "data":[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-  					          "height":10,
-  					          "name":"ground",
-  					          "opacity":1,
-  					          "type":"tilelayer",
-  					          "visible":true,
-  					          "width":10,
-  					          "x":0,
-  					          "y":0
-  					         }, 
-  					         {
-  					          "data":[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0],
-  					          "height":10,
-  					          "name":"obstacles",
-  					          "opacity":1,
-  					          "type":"tilelayer",
-  					          "visible":true,
-  					          "width":10,
-  					          "x":0,
-  					          "y":0
-  					         }],
-  					  "orientation":"orthogonal",
-  					  "properties":
-  					     {
-
-  					     },
-  					  "tileheight":32,
-  					  "tilesets":[
-  					         {
-  					          "firstgid":1,
-  					          "image":"../img/ground.png",
-  					          "imageheight":32,
-  					          "imagewidth":96,
-  					          "margin":0,
-  					          "name":"ground",
-  					          "properties":
-  					             {
-
-  					             },
-  					          "spacing":0,
-  					          "tileheight":32,
-  					          "tilewidth":32
-  					         }, 
-  					         {
-  					          "firstgid":4,
-  					          "image":"../img/buckets.png",
-  					          "imageheight":64,
-  					          "imagewidth":96,
-  					          "margin":0,
-  					          "name":"buckets",
-  					          "properties":
-  					             {
-
-  					             },
-  					          "spacing":0,
-  					          "tileheight":32,
-  					          "tilewidth":32
-  					         }],
-  					  "tilewidth":32,
-  					  "version":1,
-  					  "width":10
-  					 }	  		   
-  			  			  			  			  		  			
-  			Crafty.init(320, 320);
-  			Crafty.background("green");
-  			
+  		window.onload = function() {  			   				     			  			  			  			  		  
+  			Crafty.init(320, 320);  			  		
   			Crafty.scene("Load", function() {
-
+				
+  				//Preload sprites first
   				 Crafty.load([
   				              "img/ground.png",
-  				              "img/buckets.png" 
+  				              "img/obstacles.png" 
   				             ], function() {
   					 
   						Crafty.scene("Main");		
@@ -99,18 +31,43 @@
   			Crafty.scene("Load");
   			  			  		
 			Crafty.scene("Main", function () {
-  				
-				var mapka = Crafty.e("2D, DOM, TiledMap")
-							.setSource( MAP )
-							.createWorld()
-							.bind("WorldCreated", function(){
-								console.log("done");
-							})
-												
-				Crafty.e("2D, DOM, Color, Fourway")
-  			   		.attr({x: 0, y: 0, z: 100, w:20, h:20})  
-  			   		.color("#000000")
-  			   		.fourway(1)  			   						  			 			  		   	  				
+				
+				Crafty.e("2D, DOM, TiledMapBuilder").createWorld( SOURCE_FROM_TILED_MAP_EDITOR, function( tiledmap ){
+					
+					//Obstacles
+					for (var obstacle = 0; obstacle < tiledmap.getLayer('obstacles').length; obstacle++){
+						tiledmap.getLayer('obstacles')[obstacle]
+							.addComponent("Collision, Obstacle")
+							.collision();							
+					}
+					
+					//Fence
+					for (var fence = 0; fence < tiledmap.getLayer('fence').length; fence++){
+						tiledmap.getLayer('fence')[fence]
+							.addComponent("Collision, Fence")
+							.collision();							
+					}
+					
+					//Head
+					for (var head = 0; head < tiledmap.getLayer('head').length; head++){
+						tiledmap.getLayer('head')[head].z = 1000; 																		
+					}
+																		
+				});
+				
+				//Player
+				Crafty.e("2D, DOM, Color, Fourway, Player, Collision")
+  			   		.attr({x: 150, y: 100, z: 100, w:30, h:30})  
+  			   		.color("red")
+  			   		.fourway(3)  			   					
+  			   		.collision()
+  			   		.bind('Moved', function(from) {
+						if(this.hit('Obstacle') || 
+						   this.hit('Fence') ){
+							this.attr({x: from.x, y:from.y});
+						}
+					});
+  			   		
   			});  			  													
   	}	
 	</script>	

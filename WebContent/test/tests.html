@@ -9,14 +9,10 @@
 		<script src="../tiledmap.js"></script>
 		<script>
 		window.onload = function() {
-			
+																		
 			var empty;
 			var broken = {width:10, height:10, layers:[], tilesets:[]}
-			var valid = {width:10, height:10, layers:[{}], tilesets:[{}]}
-						
-			var layer0 = { name:'layer0', tiles:[[0,1], [2,3]] }
-			var layer1 = { name:'layer1', tiles:[[4,5], [6,7]] }
-			var layers = [layer0, layer1 ];
+			var valid = getSource() 
 								
 			Crafty.init(320, 320);
 						
@@ -32,38 +28,175 @@
 				ok( Crafty.e("2D, DOM, TiledMapBuilder").isValid( valid ), "Valid source");
 			});
 			
-			test("load", function() {												
-				//throws( Crafty.e("2D, DOM, TiledMapBuilder").load( empty ), "Empty source");
-				//throws( Crafty.e("2D, DOM, TiledMapBuilder").load( broken ), "Broken source");								
-				equal( Crafty.e("2D, DOM, TiledMapBuilder").load( valid ).getSource(), valid, "Valid source");
+			test("isLayer", function() {	
+				var map = Crafty.e("2D, DOM, TiledMapBuilder").createWorld( getSource() );
+				
+				ok( map.isLayer('obstacles'), "Layer obstacles exists.");
+				ok( !map.isLayer("wrongName"), "Layer wrongName non exists.");
 			});
 			
-			test("getTiles", function() {												
-				var map = Crafty.e("2D, DOM, TiledMapBuilder")
-				map._layers = layers;
+			test("getLayerFromSource", function() {	
+				var map = Crafty.e("2D, DOM, TiledMapBuilder").createWorld( getSource() );
+				
+				deepEqual( map.getLayerFromSource("obstacles"), getSource().layers[2] );	
+				equal( map.getLayerFromSource("wrong name") , null , "Null");
+			});
+			
+			test("getTileIndex", function() {	
+				var map = Crafty.e("2D, DOM, TiledMapBuilder").createWorld( getSource() );;
+				
+				equal( map.getTileIndex('obstacles', 1, 1), 0);
+				equal( map.getTileIndex('obstacles', 2, 3), 12);
+											
+				throws(function() { map.getTileIndex('obstacles', 0, 0) },"Out of range.");																	
+			});
 								
-				equal( map.getTiles(0).name , layers[0].name, "Layer0");
-				equal( map.getTiles(1).name , layers[1].name, "Layer1");			
-				equal( map.getTiles(2) , null , "Null");
+			test("getLayer", function() {												
+				var map = Crafty.e("2D, DOM, TiledMapBuilder").createWorld( getSource() )	
+												
+				ok( map.getLayer('obstacles').length == 11);
+				equal( map.getLayer('obstacles')[0].x, 64, "posX" );
+				equal( map.getLayer('obstacles')[0].y, 32, "posY" );
+				ok( map.getLayer('obstacles')[0].has("Tile4"));
+				
+				equal( map.getLayer("wrong name") , null , "Null");
 			});
 			
 			test("getTile", function() {												
 				var map = Crafty.e("2D, DOM, TiledMapBuilder")
-				map._layers = layers;
-								
-				equal( map.getTile(0, 1 , 1) , layers[0].tiles[1][1]);
-				equal( map.getTile(1, 0 , 1) , layers[1].tiles[0][1]);			
-				
-				equal( map.getTile(3, 0 , 1) , null);
-				equal( map.getTile(1, 10 , 1) , null);
-				equal( map.getTile(1, 1 , 10) , null);
+					.createWorld( getSource() );
+											
+				ok( map.getTile("obstacles", 2 , 3).has("Tile4") );				
+				equal( map.getTile("obstacles", 2 , 3).x, 64, "posX" );
+				equal( map.getTile("obstacles", 2 , 3).y, 32, "posY" );
+											
+				equal( map.getTile("wrong name", 0 , 1) , null, "Layer does not exists");
+				equal( map.getTile("obstacles", 100 , 100) , null, "Out of range.");		
 			});
-																							
+			
+			test("makeTilesMap", function() {									
+				deepEqual( Crafty.e("2D, DOM, TiledMapBuilder").makeTilesMap( getSource().tilesets[1] )["Tile4"], [0,0]);	
+				deepEqual( Crafty.e("2D, DOM, TiledMapBuilder").makeTilesMap( getSource().tilesets[1] )["Tile12"],[0,1]);
+			});
+			
+			test("makeSprite", function() {											
+				var tilesMap = {Tile1:[0,0], Tile2:[1,0], Tile3:[2,0]};				
+				var result = Crafty.sprite( getSource().tilesets[0].tilewidth, getSource().tilesets[0].tileheight, getSource().tilesets[0].image, tilesMap);
+														
+				deepEqual( Crafty.e("2D, DOM, TiledMapBuilder").makeSprite( getSource().tilesets[0] ), result);				
+			});
+			
+			test("createEntity", function() {
+				var ent = Crafty.e("2D, DOM, TiledMapBuilder").createWorld( getSource() );
+				ok( ent.createEntity( getSource().layers[2], 12).has("Tile4")); 
+				equal( ent.createEntity( getSource().layers[2], 12).x, 64, "X position");	
+				equal( ent.createEntity( getSource().layers[2], 12).y, 32, "Y position");					
+			});
+			
+			test("getSource", function() {																
+				deepEqual( Crafty.e("2D, DOM, TiledMapBuilder").createWorld( valid ).getSource(), valid);
+			});
+						
+			test("createWorld", function() {										
+				throws( function() {Crafty.e("2D, DOM, TiledMapBuilder").createWorld( empty )}, "Empty source");
+				throws( function() {Crafty.e("2D, DOM, TiledMapBuilder").createWorld( broken )}, "Broken source");										
+			});
+			
+//-- SOURCE DATA----------------------------------------------
+			function getSource(){
+				return { "height":10,
+					 "layers":[
+					           {
+					            "data":[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
+					            "height":10,
+					            "name":"groud",
+					            "opacity":1,
+					            "type":"tilelayer",
+					            "visible":true,
+					            "width":10,
+					            "x":0,
+					            "y":0
+					           }, 
+					           {
+					            "data":[28, 28, 28, 28, 0, 0, 28, 28, 28, 28, 28, 0, 0, 0, 0, 0, 0, 0, 0, 28, 28, 0, 0, 0, 0, 0, 0, 0, 0, 28, 28, 0, 0, 0, 0, 0, 0, 0, 0, 28, 28, 0, 0, 0, 0, 0, 0, 0, 0, 28, 28, 0, 0, 0, 0, 0, 0, 0, 0, 28, 28, 0, 0, 0, 0, 0, 0, 0, 0, 28, 28, 0, 0, 0, 0, 0, 0, 0, 0, 28, 28, 0, 0, 0, 0, 0, 0, 0, 0, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28, 28],
+					            "height":10,
+					            "name":"fence",
+					            "opacity":1,
+					            "type":"tilelayer",
+					            "visible":true,
+					            "width":10,
+					            "x":0,
+					            "y":0
+					           }, 
+					           {
+					            "data":[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 4, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 84, 85, 0, 84, 85, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+					            "height":10,
+					            "name":"obstacles",
+					            "opacity":1,
+					            "type":"tilelayer",
+					            "visible":true,
+					            "width":10,
+					            "x":0,
+					            "y":0
+					           }, 
+					           {
+					            "data":[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 68, 69, 0, 68, 69, 0, 0, 0, 0, 0, 76, 77, 0, 76, 77, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+					            "height":10,
+					            "name":"head",
+					            "opacity":1,
+					            "type":"tilelayer",
+					            "visible":true,
+					            "width":10,
+					            "x":0,
+					            "y":0
+					           }],
+					    "orientation":"orthogonal",
+					    "properties":
+					       {
+
+					       },
+					    "tileheight":32,
+					    "tilesets":[
+					           {
+					            "firstgid":1,
+					            "image":"..\/example\/img\/ground.png",
+					            "imageheight":32,
+					            "imagewidth":96,
+					            "margin":0,
+					            "name":"ground",
+					            "properties":
+					               {
+
+					               },
+					            "spacing":0,
+					            "tileheight":32,
+					            "tilewidth":32
+					           }, 
+					           {
+					            "firstgid":4,
+					            "image":"..\/example\/img\/obstacles.png",
+					            "imageheight":416,
+					            "imagewidth":256,
+					            "margin":0,
+					            "name":"obstacles",
+					            "properties":
+					               {
+
+					               },
+					            "spacing":0,
+					            "tileheight":32,
+					            "tilewidth":32
+					           }],
+					    "tilewidth":32,
+					    "version":1,
+					    "width":10
+					   };			
+			}																																
 		} // onload
 		</script>				
 	</head>
 	<body>
-		<h1 id="qunit-header">Crafty: Stage</h1>
+		<h1 id="qunit-header">Crafty: TiledMapBuilder</h1>
 		<h2 id="qunit-banner"></h2>
 		<div id="qunit-testrunner-toolbar"></div>
 		<h2 id="qunit-userAgent"></h2>
