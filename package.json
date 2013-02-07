@@ -1,0 +1,32 @@
+{
+    "name": "TiledMapBuilder",
+    "version": "0.8",
+    "title": "Crafty Tiled Map Builder",
+    "author": {
+        "name": "Tomas Jurman",
+        "url": "http://tomasjurman.blogspot.cz/"
+    },
+    "licenses": [
+        {
+            "type": "MIT",
+            "url": "http://www.opensource.org/licenses/mit-license.php"
+        },
+        {
+            "type": "GPL",
+            "url": "http://www.opensource.org/licenses/gpl-license.php"
+        }
+    ],
+    "description": "TiledMapBuilder is component for Crafty framework for building a RPG tiled map based on JSON file exported from Tiled Map Editor (http://www.mapeditor.org/).",
+    "keywords": [
+        "map builder",
+        "tiled map",
+        "tile",
+        "Crafty",
+        "javascript"
+    ],
+    "jsfiddle" : "disable", 
+    "homepage": "https://github.com/Kibo/TiledMapBuilder",
+    "files": [
+    	"WebContent/tiledmapbuilder.js"
+    ]
+}
