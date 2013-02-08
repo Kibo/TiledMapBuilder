@@ -85,7 +85,7 @@ Crafty.c("TiledMapBuilder", {
 	 * @param	String layerName - number of layer
 	 * @param	Integer row - number of row from tiled matrix, range: 1-n	
 	 * @param	Integer column - number of column from tiled matrix, range: 1-n	
-	 * @return	Object<Crafty.sprite()> tile 
+	 * @return	Object<Crafty.e> tile 
 	 */
 	getTile: function( layerName, row, column){
 		
@@ -100,7 +100,7 @@ Crafty.c("TiledMapBuilder", {
 	 * #TiledMapBuilder.getLayers	
 	 * Contains all tiles as Crafty.entity divided into layers
 	 * 
-	 * @return	Array<Array<Entity>[]>[] layers - [ [tile1, tile2], [tile3, tile4], ...] 		
+	 * @return	Array<Array<Crafty.e>[]>[] layers - [ [tile1, tile2], [tile3, tile4], ...] 		
 	 */
     getLayers: function(){
     	return this._layers;
@@ -112,10 +112,10 @@ Crafty.c("TiledMapBuilder", {
 	 * @example
 	 * RenderMethod depends on parent Entity:
 	 * ~~~	
-	 * Crafty.e("2D, Canvas, TiledMap")
+	 * Crafty.e("2D, Canvas, TiledMapBuilder")
 	 * return -> Canvas	 
 	 * 	 
-	 * Crafty.e("2D, DOM, TiledMap")
+	 * Crafty.e("2D, DOM, TiledMapBuilder")
 	 * return -> DOM	 
 	 * ~~~
 	 * 
