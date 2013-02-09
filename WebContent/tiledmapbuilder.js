@@ -175,7 +175,7 @@ Crafty.c("TiledMapBuilder", {
 	 * @see http://craftyjs.com/api/Crafty-sprite.html - Crafty.sprite() documentation
 	 */
 	makeSprite:function( tileset ){				
-		return Crafty.sprite(tileset.tilewidth, tileset.tileheight, tileset.image, this.makeTilesMap( tileset ));										
+		return Crafty.sprite(tileset.tilewidth, tileset.tileheight, tileset.image, this.makeTilesMap( tileset ), tileset.margin, tileset.margin);										
 	},
 	
 	/**
@@ -186,9 +186,9 @@ Crafty.c("TiledMapBuilder", {
 	 * @return Object map - {tile1:[posX, posY], tile2:[posX, posY], ...}	
 	 */
 	makeTilesMap:function(tileset){	
-
-		var numberOfColumns = tileset.imagewidth / tileset.tilewidth;
-		var numberOfRows = tileset.imageheight / tileset.tileheight;
+			
+		var numberOfColumns = Math.round(tileset.imagewidth / (tileset.tilewidth+tileset.margin));
+	    var numberOfRows = Math.round(tileset.imageheight / (tileset.tileheight+tileset.margin));
 		
 		var tilesMap = {};		
 		for(var row = 0; row < numberOfRows; row++ ){
@@ -242,7 +242,7 @@ Crafty.c("TiledMapBuilder", {
 	 */
 	createEntity:function(layer, dataIndex){	
 		var posX = (dataIndex % layer.width) * this._source.tilewidth;
-		var posY = Math.floor((dataIndex / layer.height)) * this._source.tileheight;	
+		var posY = Math.floor((dataIndex / layer.width)) * this._source.tileheight;			
 		return Crafty.e("2D," + this.getRenderMethod() + ", " + "Tile" + layer.data[dataIndex]).attr({x:posX, y:posY});	
 	},
 	
