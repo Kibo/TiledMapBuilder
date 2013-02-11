@@ -12,7 +12,7 @@ A Tiled map (http://mapeditor.org) importer for Crafty.js (http://craftyjs.com)
 
 ![Tiled Map Editor](https://raw.github.com/Kibo/TiledMapBuilder/master/WebContent/img/export.png)
 
-3) Use [Crafty.js](http://craftyjs.com) for building your amazing HTML5 game (see [demo1](http://crafty.kibo.cz/tiled2Demo/example1/), [demo2](http://crafty.kibo.cz/tiled2Demo/example2/)).
+3) Use [Crafty.js](http://craftyjs.com) for building your amazing HTML5 game (see [demo1](http://crafty.kibo.cz/tiled2Demo/examples/EasterIsland), [demo2](http://crafty.kibo.cz/tiled2Demo/examples/Sea)).
 
 ![Crafty HTML5 game](https://raw.github.com/Kibo/TiledMapBuilder/master/WebContent/img/game1.png)
 ![Crafty HTML5 game](https://raw.github.com/Kibo/TiledMapBuilder/master/WebContent/img/game2.png)
@@ -50,8 +50,8 @@ var tile = TiledMapBuilder.getTile( layerName, row, column );
 
 
 ###Examples
-- [Demo: EasterIsland](http://crafty.kibo.cz/tiled2Demo/example1/)
-- [Demo: Sea](http://crafty.kibo.cz/tiled2Demo/example2/)
+- [Demo: EasterIsland](http://crafty.kibo.cz/tiled2Demo/examples/EasterIsland)
+- [Demo: Sea](http://crafty.kibo.cz/tiled2Demo/examples/Sea)
 
 
 **Contact me**
