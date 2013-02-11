@@ -46,7 +46,11 @@ var tile = TiledMapBuilder.getTile( layerName, row, column );
 - no depending on the third party library
 - [documented code](https://github.com/Kibo/TiledMapBuilder/blob/master/WebContent/tiledmapbuilder.js)
 - [tested code](https://github.com/Kibo/TiledMapBuilder/blob/master/WebContent/test/tests.html)
-- [demo](http://crafty.kibo.cz/tiled2Demo/example/)
+
+
+###Examples
+- [Demo: EasterIsland](http://crafty.kibo.cz/tiled2Demo/example1/)
+- [Demo: Sea](http://crafty.kibo.cz/tiled2Demo/example2/)
 
 
 **Contact me**
