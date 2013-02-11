@@ -12,9 +12,10 @@ A Tiled map (http://mapeditor.org) importer for Crafty.js (http://craftyjs.com)
 
 ![Tiled Map Editor](https://raw.github.com/Kibo/TiledMapBuilder/master/WebContent/img/export.png)
 
-3) Use [Crafty.js](http://craftyjs.com) for building your amazing HTML5 game (see [demo](http://crafty.kibo.cz/tiled2Demo/example/)).
+3) Use [Crafty.js](http://craftyjs.com) for building your amazing HTML5 game (see [demo1](http://crafty.kibo.cz/tiled2Demo/example1/), [demo2](http://crafty.kibo.cz/tiled2Demo/example2/)).
 
-![Crafty HTML5 game](https://raw.github.com/Kibo/TiledMapBuilder/master/WebContent/img/game.png)
+![Crafty HTML5 game](https://raw.github.com/Kibo/TiledMapBuilder/master/WebContent/img/game1.png)
+![Crafty HTML5 game](https://raw.github.com/Kibo/TiledMapBuilder/master/WebContent/img/game2.png)
 
 
 ###Usage:
