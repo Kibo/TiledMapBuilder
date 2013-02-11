@@ -56,9 +56,9 @@ var tile = TiledMapBuilder.getTile( layerName, row, column );
 
 **Contact me**
 
-[Crafty group thread](https://groups.google.com/d/msg/craftyjs/63eQ0SRw40I/tk5cGKRCME0J)
-
 I will be grateful for constructive comments.
+
+- [Crafty group thread](https://groups.google.com/d/msg/craftyjs/63eQ0SRw40I/tk5cGKRCME0J)
 - tomasjurman@gmail.com
 
 
