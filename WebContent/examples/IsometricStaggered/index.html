@@ -14,9 +14,11 @@
     <script src="js/source.js"></script> 
     <script src="../../tiledmapbuilder.js"></script>    
 	<script>
-  		window.onload = function() {  			   				     			  			  			  			  		  
-  			Crafty.init(640, 320);  
-  			Crafty.viewport.init( 640,320 );
+  		window.onload = function() {  	
+  			var WIDTH = 640;
+  			var HEIGHT = 320;
+  			Crafty.init(WIDTH, HEIGHT);  
+  			Crafty.viewport.init(WIDTH, HEIGHT );
   			Crafty.scene("Load", function() {
 				
   				//Preload sprites first
@@ -31,7 +33,8 @@
   			Crafty.scene("Load");
   			  			  		
 			Crafty.scene("Main", function () {											
-				Crafty.e("2D, DOM, TiledMapBuilder").createWorld( SOURCE_FROM_TILED_MAP_EDITOR );			
+				Crafty.e("2D, DOM, TiledMapBuilder").createWorld( SOURCE_FROM_TILED_MAP_EDITOR );
+				//TODO
   			});  			  													
   	}	
 	</script>	
