@@ -5,7 +5,7 @@
 		<script src="http://code.jquery.com/jquery-latest.js"></script>
 		<link rel="stylesheet" href="http://code.jquery.com/qunit/git/qunit.css" type="text/css" media="screen" />
 		<script type="text/javascript" src="http://code.jquery.com/qunit/git/qunit.js"></script>							
-		<script src="../example/js/crafty.js"></script>
+		<script src="../libs/crafty.js"></script>
 		<script src="source.js"></script>
 		<script src="../tiledmapbuilder.js"></script>
 		<script>
@@ -13,7 +13,7 @@
 																		
 			var empty;
 			var broken = {width:10, height:10, layers:[], tilesets:[]}
-			var valid = getSource() 
+			var valid = getSourceOrhogonal() 
 								
 			Crafty.init(320, 320);
 						
@@ -30,21 +30,21 @@
 			});
 			
 			test("isLayer", function() {	
-				var map = Crafty.e("2D, DOM, TiledMapBuilder").createWorld( getSource() );
+				var map = Crafty.e("2D, DOM, TiledMapBuilder").createWorld( getSourceOrhogonal() );
 				
 				ok( map.isLayer('obstacles'), "Layer obstacles exists.");
 				ok( !map.isLayer("wrongName"), "Layer wrongName non exists.");
 			});
 			
 			test("getLayerFromSource", function() {	
-				var map = Crafty.e("2D, DOM, TiledMapBuilder").createWorld( getSource() );
+				var map = Crafty.e("2D, DOM, TiledMapBuilder").createWorld( getSourceOrhogonal() );
 				
-				deepEqual( map.getLayerFromSource("obstacles"), getSource().layers[2] );	
+				deepEqual( map.getLayerFromSource("obstacles"), getSourceOrhogonal().layers[2] );	
 				equal( map.getLayerFromSource("wrong name") , null , "Null");
 			});
 			
 			test("getTileIndex", function() {	
-				var map = Crafty.e("2D, DOM, TiledMapBuilder").createWorld( getSource() );;
+				var map = Crafty.e("2D, DOM, TiledMapBuilder").createWorld( getSourceOrhogonal() );;
 				
 				equal( map.getTileIndex('obstacles', 1, 1), 0);
 				equal( map.getTileIndex('obstacles', 2, 3), 12);
@@ -53,7 +53,7 @@
 			});
 								
 			test("getLayer", function() {												
-				var map = Crafty.e("2D, DOM, TiledMapBuilder").createWorld( getSource() )	
+				var map = Crafty.e("2D, DOM, TiledMapBuilder").createWorld( getSourceOrhogonal() )	
 												
 				ok( map.getLayer('obstacles').length == 11);
 				equal( map.getLayer('obstacles')[0].x, 64, "posX" );
@@ -65,7 +65,7 @@
 			
 			test("getTile", function() {												
 				var map = Crafty.e("2D, DOM, TiledMapBuilder")
-					.createWorld( getSource() );
+					.createWorld( getSourceOrhogonal() );
 											
 				ok( map.getTile("obstacles", 2 , 3).has("Tile4") );				
 				equal( map.getTile("obstacles", 2 , 3).x, 64, "posX" );
@@ -75,23 +75,23 @@
 				equal( map.getTile("obstacles", 100 , 100) , null, "Out of range.");		
 			});
 			
-			test("makeTilesMap", function() {									
-				deepEqual( Crafty.e("2D, DOM, TiledMapBuilder").makeTilesMap( getSource().tilesets[1] )["Tile4"], [0,0]);	
-				deepEqual( Crafty.e("2D, DOM, TiledMapBuilder").makeTilesMap( getSource().tilesets[1] )["Tile12"],[0,1]);
+			test("arrangeTiles", function() {									
+				deepEqual( Crafty.e("2D, DOM, TiledMapBuilder").arrangeTiles( getSourceOrhogonal().tilesets[1] )["Tile4"], [0,0]);	
+				deepEqual( Crafty.e("2D, DOM, TiledMapBuilder").arrangeTiles( getSourceOrhogonal().tilesets[1] )["Tile12"],[0,1]);
 			});
 			
-			test("makeSprite", function() {											
+			test("createSprite", function() {											
 				var tilesMap = {Tile1:[0,0], Tile2:[1,0], Tile3:[2,0]};				
-				var result = Crafty.sprite( getSource().tilesets[0].tilewidth, getSource().tilesets[0].tileheight, getSource().tilesets[0].image, tilesMap);
+				var result = Crafty.sprite( getSourceOrhogonal().tilesets[0].tilewidth, getSourceOrhogonal().tilesets[0].tileheight, getSourceOrhogonal().tilesets[0].image, tilesMap);
 														
-				deepEqual( Crafty.e("2D, DOM, TiledMapBuilder").makeSprite( getSource().tilesets[0] ), result);				
+				deepEqual( Crafty.e("2D, DOM, TiledMapBuilder").createSprite( getSourceOrhogonal().tilesets[0] ), result);				
 			});
 			
 			test("createEntity", function() {
-				var ent = Crafty.e("2D, DOM, TiledMapBuilder").createWorld( getSource() );
-				ok( ent.createEntity( getSource().layers[2], 12).has("Tile4")); 
-				equal( ent.createEntity( getSource().layers[2], 12).x, 64, "X position");	
-				equal( ent.createEntity( getSource().layers[2], 12).y, 32, "Y position");					
+				var ent = Crafty.e("2D, DOM, TiledMapBuilder").createWorld( getSourceOrhogonal() );
+				ok( ent.createEntity( getSourceOrhogonal().layers[2], 12).has("Tile4")); 
+				equal( ent.createEntity( getSourceOrhogonal().layers[2], 12).x, 64, "X position");	
+				equal( ent.createEntity( getSourceOrhogonal().layers[2], 12).y, 32, "Y position");					
 			});
 			
 			test("getSource", function() {																
@@ -103,10 +103,130 @@
 				throws( function() {Crafty.e("2D, DOM, TiledMapBuilder").createWorld( broken )}, "Broken source");										
 			});
 			
+			test("getOrientation", function() {				
+				var ent = Crafty.e("2D, DOM, TiledMapBuilder").createWorld( getSourceOrhogonal() );
+				equal( ent.getOrientation(), ent.constant.ORTHOGONAL, "orthogonal");	
+							
+				ent = Crafty.e("2D, DOM, TiledMapBuilder").createWorld( getSourceIsometric() );
+				equal( ent.getOrientation(), ent.constant.ISOMETRIC_DIAMOND, "isometric");			
+				
+				ent = Crafty.e("2D, DOM, TiledMapBuilder").createWorld( getSourceStaggered() );
+				equal( ent.getOrientation(), ent.constant.ISOMETRIC_STAGGERED, "staggered");												
+			});
+			
+			test("isIsometric", function() {				
+				var ent = Crafty.e("2D, DOM, TiledMapBuilder").createWorld( getSourceOrhogonal() );
+				ok( !ent.isIsometric(), "is orthogonal" ); 
+							
+				ent = Crafty.e("2D, DOM, TiledMapBuilder").createWorld( getSourceIsometric() );
+				ok( ent.isIsometric(), "is orthogonal" ); 	
+				
+				ent = Crafty.e("2D, DOM, TiledMapBuilder").createWorld( getSourceStaggered() );
+				ok( ent.isIsometric(), "is stagged" ); 														
+			});
+			
+			test("getIsometric", function() {			
+				var ent = Crafty.e("2D, DOM, TiledMapBuilder").createWorld( getSourceIsometric() );
+				deepEqual( ent.getIsometric(), Crafty.isometric.size(64, 32) ); 
+				
+				ent = Crafty.e("2D, DOM, TiledMapBuilder").createWorld( getSourceOrhogonal() );
+				equal( ent.getIsometric(), null); 	
+			});
+			
+			test("setPositionOrtogonal", function() {					
+				var entity = Crafty.e("2D, DOM");
+				
+				//ortogonal 32x32
+				var ortogonal = Crafty.e("2D, DOM, TiledMapBuilder").createWorld( getSourceOrhogonal() );								
+				
+				ortogonal.setPosition( entity, 0, 0);				
+				equal(entity._x, 0);
+				equal(entity._y, 0);
+				
+				ortogonal.setPosition( entity, 1, 0);				
+				equal(entity._x, 32);
+				equal(entity._y, 0);
+				
+				ortogonal.setPosition( entity, 2, 0);				
+				equal(entity._x, 64);
+				equal(entity._y, 0);
+				
+				ortogonal.setPosition( entity, 0, 1);				
+				equal(entity._x, 0);
+				equal(entity._y, 32);
+				
+				ortogonal.setPosition( entity, 1, 1);				
+				equal(entity._x, 32);
+				equal(entity._y, 32);		
+			});
+			
+			
+			test("setPositionIsometricDiamond", function() {					
+				var entity = Crafty.e("2D, DOM");
+			
+				//isometric diamond 64x32
+				var isometric = Crafty.e("2D, DOM, TiledMapBuilder").createWorld( getSourceIsometric() );
+				
+				isometric.setPosition( entity, 0, 0);				
+				equal(entity._x, 0);
+				equal(entity._y, 0);
+				
+				isometric.setPosition( entity, 1, 0);				
+				equal(entity._x, 32);
+				equal(entity._y, 16);
+				
+				isometric.setPosition( entity, 2, 0);				
+				equal(entity._x, 64);
+				equal(entity._y, 32);
+				
+				isometric.setPosition( entity, 0, 1);				
+				equal(entity._x, -32);
+				equal(entity._y, 16);
+				
+				isometric.setPosition( entity, 1, 1);				
+				equal(entity._x, 0);
+				equal(entity._y, 32);
+			});
+			
+			test("setPositionIsometricStaggered", function() {					
+				var entity = Crafty.e("2D, DOM");
+			
+				//isometric staggered 40x20
+				var staggered = Crafty.e("2D, DOM, TiledMapBuilder").createWorld( getSourceStaggered() );
+				
+				staggered.setPosition( entity, 0, 0);				
+				equal(entity._x, 0);
+				equal(entity._y, 0);
+				
+				staggered.setPosition( entity, 1, 0);				
+				equal(entity._x, 40);
+				equal(entity._y, 0);
+				
+				staggered.setPosition( entity, 2, 0);				
+				equal(entity._x, 80);
+				equal(entity._y, 0);
+				
+				staggered.setPosition( entity, 0, 1);				
+				equal(entity._x, 20);
+				equal(entity._y, 10);
+				
+				staggered.setPosition( entity, 1, 1);				
+				equal(entity._x, 60);
+				equal(entity._y, 10);
+			});
+			
 //-- SOURCE DATA----------------------------------------------
-			function getSource(){
-				return SOURCE_FROM_TILED_MAP_EDITOR;			
-			}																																
+			function getSourceOrhogonal(){
+				return ORTHOGONAL;			
+			}	
+
+			function getSourceIsometric(){
+				return ISOMETRIC;
+			}
+			
+			function getSourceStaggered(){
+				return STAGGERED;
+			}
 		} // onload
 		</script>				
 	</head>

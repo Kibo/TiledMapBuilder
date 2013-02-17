@@ -13,18 +13,24 @@
 * @author Tomas Jurman (tomasjurman@gmail.com)
 */
 Crafty.c("TiledMapBuilder", {  	  				
+		
+	 constant: {
+		 ISOMETRIC_DIAMOND		:'isometric',
+		 ISOMETRIC_STAGGERED	:'staggered',
+		 ORTHOGONAL				:'orthogonal',
+		 RENDER_METHOD_CANVAS	:'Canvas',
+	     RENDER_METHOD_DOM		:'DOM'
+	 },
 	
-	 /**
-	 * Default renderer method 		
-	 * @see TiledMapBuilder.getRenderMethod  			 
-	 */
-	_renderMethod: 'DOM',
+	_renderMethod: null,
+	_isometric:null,
 	_layers: {},
 	
     init: function() {    			    	  			    
-    	if( this.has("Canvas") ){
-    		this._renderMethod = 'Canvas';
-    	}  			    	
+    	this._renderMethod = this.has(this.constant.RENDER_METHOD_CANVAS) ? 
+    			this.constant.RENDER_METHOD_CANVAS : 
+    			this.constant.RENDER_METHOD_DOM;	
+    			    	
     	return this;
     },
 	      			   	     
@@ -32,10 +38,11 @@ Crafty.c("TiledMapBuilder", {
 	 * #TiledMapBuilder.createWorld
 	 * Renders a tiled world based on the source file.
 	 * 
-	 * @param	Object source - object from JSON file exported by Tiled Map Editor	
-	 * @param 	Function callback - callback function call when world is done 
-	 * @throws	Error - when source is not valid 	
-	 * @return	Object this  
+	 * @param {Object} source - object from JSON file exported by Tiled Map Editor	
+	 * @param {Function} callback - callback function call when world is done 
+	 * @throws {Error} - when source is not valid 	
+	 * @return {Object} this
+	 *   
 	 * @see http://www.mapeditor.org/ - Tiled Map Editor, export to JSON			 
 	 */
     createWorld: function( source, callback ) {     	    	   
@@ -43,10 +50,15 @@ Crafty.c("TiledMapBuilder", {
     		throw new Error("Source is not valid.");    		
     	}
     	
-    	this._source = source;	
-    	this.makeSprites( source );
-    	this.makeLayers( source );    
-           
+    	this._source = source;
+    	
+    	if( this.isIsometric() ){
+    		this.setIsometric( source );
+    	}
+    	
+    	this.createTiles( source );
+    	this.createEntities( source );
+        	    	     	            
     	if(typeof callback != 'undefined'){
     		callback.call(this, this);
     	}
@@ -134,12 +146,43 @@ Crafty.c("TiledMapBuilder", {
     getSource: function(){
     	return this._source;
     },
-     
-	/**
+        
+    /**@
+	 * #TiledMapBuilder.getIsometric
+	 * 
+	 * @return Object Crafty.isometric or null if map is not isometric
+	 * 
+	 * @see http://craftyjs.com/api/Crafty-isometric.html		
+	 */
+    getIsometric:function(){
+    	return this._isometric;
+    },
+    
+    /**@
+	 * #TiledMapBuilder.isIsometric
+	 * 
+	 * @return	boolean true or false		
+	 */
+    isIsometric:function(){
+    	return this._source.orientation == this.constant.ISOMETRIC_DIAMOND || 
+    		this._source.orientation == this.constant.ISOMETRIC_STAGGERED;
+    },
+    
+    /**@
+	 * #TiledMapBuilder.getOrientation
+	 * Map orientation.
+	 * 
+	 * @return {String} (orthogonal || isometric || staggered)		
+	 */
+    getOrientation:function(){
+    	return this._source.orientation;
+    },
+           
+	/*
 	 * Validate source object
 	 * 
-	 * @param source - object from JSON file exported by Tiled Map Editor	
-	 * @return boolean
+	 * @param {Object} source - object from JSON file exported by Tiled Map Editor	
+	 * @return {boolean} true or false
 	 */
 	isValid: function( source ){
 		var isValid = true;
@@ -154,38 +197,38 @@ Crafty.c("TiledMapBuilder", {
 		return isValid;
 	},
 	
-	/**
+	/*
 	 * Create Crafty.sprite() for each source image	
 	 * 
-	 * @param Object source - object from JSON file exported by Tiled Map Editor	
-	 * @return Object this
+	 * @param {Object} source - object from JSON file exported by Tiled Map Editor	
+	 * @return {Object} this
 	 */
-	makeSprites: function( source ){
-		
+	createTiles: function( source ){		
 		for(var idx = 0; idx < source.tilesets.length; idx++ ){
-			this.makeSprite( source.tilesets[idx] );			
+			this.createSprite( source.tilesets[idx] );			
 		}		
 	},
 	
-	/**
+	/*
 	 * Create Crafty.sprite() from tileset	
 	 * 
-	 * @param Object tileset	
-	 * @return Object Crafty.sprite()	
+	 * @param {Object} tileset	
+	 * @return {Object} Crafty.sprite()
+	 * 	
 	 * @see http://craftyjs.com/api/Crafty-sprite.html - Crafty.sprite() documentation
 	 */
-	makeSprite:function( tileset ){				
-		return Crafty.sprite(tileset.tilewidth, tileset.tileheight, tileset.image, this.makeTilesMap( tileset ), tileset.margin, tileset.margin);										
+	createSprite:function( tileset ){				
+		return Crafty.sprite(tileset.tilewidth, tileset.tileheight, tileset.image, this.arrangeTiles( tileset ), tileset.margin, tileset.margin);										
 	},
 	
-	/**
+	/*
 	 * Create tiles map from tileset
 	 * Every tile´s name is: 'Tile' + index
 	 *  
-	 * @param Object tileset	
-	 * @return Object map - {tile1:[posX, posY], tile2:[posX, posY], ...}	
+	 * @param {Object} tileset	
+	 * @return {Object} map - {tile1:[posX, posY], tile2:[posX, posY], ...}	
 	 */
-	makeTilesMap:function(tileset){	
+	arrangeTiles:function(tileset){	
 			
 		var numberOfColumns = Math.round(tileset.imagewidth / (tileset.tilewidth+tileset.margin));
 	    var numberOfRows = Math.round(tileset.imageheight / (tileset.tileheight+tileset.margin));
@@ -202,51 +245,99 @@ Crafty.c("TiledMapBuilder", {
 		return tilesMap;
 	},
 	
-	/**
-	 * Create layers with Crafty.entity for every tile
+	 /*
+	 * #TiledMapBuilder.setIsometric
+	 * Create Crafty.isometric object and set it as private field.
 	 * 
-	 * @param Object source - object from JSON file exported by Tiled Map Editor		
+	 * @param {Object} source - object from JSON file exported by Tiled Map Editor			
 	 */
-	makeLayers: function( source ){				
+    setIsometric:function( source ){
+    	this._isometric = Crafty.isometric.size(source.tilewidth, source.tileheight);
+    },
+	
+	/*
+	 * Create Crafty.entities
+	 * 
+	 * @param {Object} source - object from JSON file exported by Tiled Map Editor		
+	 */
+    createEntities: function( source ){				
 		for(var layer = 0; layer < source.layers.length; layer++){
-			var entities = this.createEntities( source.layers[layer] );
+			var entities = this.createLayer( source.layers[layer] );
 			this._layers[source.layers[layer].name] = entities;			
 		}				
 	},
 	
-	/**
+	/*
 	 * Create Crafty.entities in layer
 	 * 
-	 * @param Object layer		
+	 * @param {Object} layer		
 	 */
-	createEntities: function( layer ){
+	createLayer: function( layer ){
 		var entities = [];
 		for(var idx = 0; idx < layer.data.length; idx++){	
 			
 			if( layer.data[idx] == 0 ){
 				entities.push(0);
 			}else{
-				entities.push( this.createEntity( layer, idx ) );
+				var entity = this.createEntity( layer, idx );										
+				entities.push( entity );
 			}						
 		}				
 		return entities;
 	},
 	
-	/**
+	
+	/*
 	 * Create Crafty.entity
 	 * 
-	 * @param Object layer
-	 * @param int dataIndex	
-	 * @return Object Crafty.entity
+	 * @param {Object} layer
+	 * @param {Integer} dataIndex	
+	 * @return {Object} Crafty.entity
+	 * 
 	 * @see http://craftyjs.com/api/Crafty-e.html - Crafty.entity
 	 */
-	createEntity:function(layer, dataIndex){	
-		var posX = (dataIndex % layer.width) * this._source.tilewidth;
-		var posY = Math.floor((dataIndex / layer.width)) * this._source.tileheight;			
-		return Crafty.e("2D," + this.getRenderMethod() + ", " + "Tile" + layer.data[dataIndex]).attr({x:posX, y:posY});	
+	createEntity:function(layer, dataIndex){			
+		var column = dataIndex % layer.width;
+		var row = Math.floor((dataIndex / layer.width));								
+		var entity = Crafty.e("2D," + this.getRenderMethod() + ", " + "Tile" + layer.data[dataIndex]);	
+		this.setPosition( entity, column, row);
+		return entity;
 	},
-	
-	/**
+			
+	/*
+	 * Set position of entity
+	 * 
+	 * @param {Object} Crafty.entity
+	 * @param {Integer} column
+	 * @param {Integer} row
+	 
+	 */
+	setPosition:function( entity, column, row){		
+		
+		switch(this.getOrientation()){
+			case this.constant.ORTHOGONAL:
+				entity.x = column * this._source.tilewidth;
+				entity.y = row * this._source.tileheight;
+				break;
+			case this.constant.ISOMETRIC_DIAMOND:				
+				var x = (column - row) * (this._source.tilewidth/2);
+				var y = (column + row) * (this._source.tileheight/2);					
+				var positions = this.getIsometric().px2pos(x,y);
+				
+				//TODO - do custom px2pos for diamond map
+				this.getIsometric().place( -positions.x, -positions.y, 0, entity);					
+				break;
+				
+			case this.constant.ISOMETRIC_STAGGERED:
+				this.getIsometric().place( column, row, 0, entity);				
+				break;
+											
+			default:
+				 throw new Error("Orientation of map " + this.getOrientation() + "is not supported.");
+		}						
+	},
+			
+	/*
 	 * Determine if layer with layerName exists
 	 * 
 	 * @param String layerName	
@@ -256,7 +347,7 @@ Crafty.c("TiledMapBuilder", {
 		return typeof this._layers[layerName] != 'undefined';
 	},
 	
-	/**
+	/*
 	 * Get index of tile from this._layers array
 	 * 
 	 * @param String layerName	
@@ -273,7 +364,7 @@ Crafty.c("TiledMapBuilder", {
 		return (column-1) + (this.getLayerFromSource( layerName ).width * (row -1));	
 	},
 	
-	/**
+	/*
 	 * Get Layer property(Object) from source object
 	 * Source object is object from JSON file exported by Tiled Map Editor
 	 * 
