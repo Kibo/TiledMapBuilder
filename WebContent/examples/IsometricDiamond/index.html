@@ -14,12 +14,15 @@
     <script src="js/source.js"></script> 
     <script src="../../tiledmapbuilder.js"></script>    
 	<script>
-  		window.onload = function() {  			   				     			  			  			  			  		  
-  			Crafty.init(640, 320);  
-  			Crafty.viewport.init( 640,320 );
+  		window.onload = function() { 
+  			var TILE_WIDTH = 64;
+  			var TILE_HEIGHT = 32;
+  			var WIDTH = 640;
+  			var HEIGHT = 340;
+  			Crafty.init(WIDTH, HEIGHT);  
+  			Crafty.viewport.init(WIDTH, HEIGHT);
   			Crafty.scene("Load", function() {
-				
-  				//Preload sprites first
+				  				
   				 Crafty.load([
   				            "img/isometric_grass_and_water.png"
   				             ], function() {
@@ -31,11 +34,28 @@
   			Crafty.scene("Load");
   			  			  		
 			Crafty.scene("Main", function () {											
-				Crafty.e("2D, DOM, TiledMapBuilder").createWorld( SOURCE_FROM_TILED_MAP_EDITOR );	
-																																		
-				Crafty.viewport.x = 285;
-				Crafty.viewport.y = -16;
-									
+				Crafty.e("2D, DOM, TiledMapBuilder").createWorld( SOURCE_FROM_TILED_MAP_EDITOR );												
+				Crafty.e("2D, DOM, Color, Keyboard").color("red").attr({x:0, y:HEIGHT/2, w:5, h:5})			
+				.bind("EnterFrame", function (direction) {
+					 if (this.isDown('LEFT_ARROW')) {
+				        	Crafty.viewport.x+=1;
+				        	this.x -=1;
+				            
+				        } else if (this.isDown('RIGHT_ARROW')) {
+				        	Crafty.viewport.x-=1;
+				        	this.x +=1;
+				            
+				        } else if (this.isDown('UP_ARROW')) {
+				        	Crafty.viewport.y+=1;
+				        	this.y -=1;
+				            
+				        } else if (this.isDown('DOWN_ARROW')) {
+				        	Crafty.viewport.y-=1;
+				        	this.y +=1;
+				        }		       
+					})  		
+				
+				Crafty.viewport.x = WIDTH/2 - TILE_WIDTH/2;							
   			});  			  													
   	}	
 	</script>	
