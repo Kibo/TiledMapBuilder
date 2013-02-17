@@ -114,7 +114,7 @@ var ISOMETRIC = { "height":10,
 		    "tilesets":[
 		           {
 		            "firstgid":1,
-		            "image":"../examples/IsometricDeamond/img/isometric_grass_and_water.png",
+		            "image":"../examples/IsometricDiamond/img/isometric_grass_and_water.png",
 		            "imageheight":384,
 		            "imagewidth":256,
 		            "margin":0,

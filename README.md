@@ -4,7 +4,7 @@ A Tiled map (http://mapeditor.org) importer for Crafty.js (http://craftyjs.com)
 
 ###The main features:
 - Draw orthogonal map (see [orthogonal1](http://crafty.kibo.cz/tiled2Demo/examples/EasterIsland), [orthogonal2](http://crafty.kibo.cz/tiled2Demo/examples/Sea)).
-- Draw isometric deamond map (see [deamond](#) )
+- Draw isometric diamond map (see [diamond](#) )
 - Draw isometric staggered map (see [staggered](#) )
 
 ###Advantage:

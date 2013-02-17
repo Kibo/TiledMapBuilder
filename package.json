@@ -16,7 +16,7 @@
             "url": "http://www.opensource.org/licenses/gpl-license.php"
         }
     ],
-    "description": "Component for building a RPG tiled map based on JSON file exported from Tiled Map Editor (http://www.mapeditor.org/).",
+    "description": "Component for building a orthogonal, isometric diamond and isometric staggered tiled map based on JSON file exported from Tiled Map Editor (http://www.mapeditor.org/).",
     "keywords": [
         "map builder",
         "tiled map",
