@@ -3,8 +3,8 @@
 A Tiled map (http://mapeditor.org) importer for Crafty.js (http://craftyjs.com)
 
 ###The main features:
-- Draw orthogonal map (see [orthogonal1](http://crafty.kibo.cz/tiled2Demo/examples/EasterIsland), [orthogonal2](http://crafty.kibo.cz/tiled2Demo/examples/Sea)).
-- Draw isometric diamond map (see [diamond](http://htmlpreview.github.com/?https://raw.github.com/Kibo/TiledMapBuilder/master/WebContent/examples/IsometricDiamond/index.html) )
+- Draw orthogonal map (see [orthogonal1](http://crafty.kibo.cz/tiled2Demo/examples/OrthogonalEasterIsland), [orthogonal2](http://crafty.kibo.cz/tiled2Demo/examples/OrthogonalSea)).
+- Draw isometric diamond map (see [diamond](http://crafty.kibo.cz/tiled2Demo/examples/IsometricDiamod))
 - Draw isometric staggered map (see [staggered](http://htmlpreview.github.com/?https://raw.github.com/Kibo/TiledMapBuilder/master/WebContent/examples/IsometricStaggered/index.html) )
 
 ###Advantage:
@@ -91,9 +91,9 @@ var iso = TiledMapBuilder.getIsometric();
 
 
 ###Examples
-- [Demo orthogonal: EasterIsland](http://crafty.kibo.cz/tiled2Demo/examples/EasterIsland)
-- [Demo orthogonal: Sea](http://crafty.kibo.cz/tiled2Demo/examples/Sea)
-- [Demo isometric: Meadow](http://htmlpreview.github.com/?https://raw.github.com/Kibo/TiledMapBuilder/master/WebContent/examples/IsometricDiamond/index.html)
+- [Demo orthogonal: EasterIsland](http://crafty.kibo.cz/tiled2Demo/examples/OrthogonalEasterIsland)
+- [Demo orthogonal: Sea](http://crafty.kibo.cz/tiled2Demo/examples/OrthogonalSea)
+- [Demo isometric: Meadow](http://crafty.kibo.cz/tiled2Demo/examples/IsometricDiamod)
 - [Demo staggered: Forest](http://htmlpreview.github.com/?https://raw.github.com/Kibo/TiledMapBuilder/master/WebContent/examples/IsometricStaggered/index.html)
 
 
