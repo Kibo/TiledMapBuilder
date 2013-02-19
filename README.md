@@ -4,7 +4,7 @@ A Tiled map (http://mapeditor.org) importer for Crafty.js (http://craftyjs.com)
 
 ###The main features:
 - Draw orthogonal map (see [orthogonal1](http://crafty.kibo.cz/tiled2Demo/examples/OrthogonalEasterIsland), [orthogonal2](http://crafty.kibo.cz/tiled2Demo/examples/OrthogonalSea)).
-- Draw isometric diamond map (see [diamond](http://crafty.kibo.cz/tiled2Demo/examples/IsometricDiamod))
+- Draw isometric diamond map (see [diamond](http://crafty.kibo.cz/tiled2Demo/examples/IsometricDiamond))
 - Draw isometric staggered map (see [staggered](http://htmlpreview.github.com/?https://raw.github.com/Kibo/TiledMapBuilder/master/WebContent/examples/IsometricStaggered/index.html) )
 
 ###Advantage:
@@ -93,7 +93,7 @@ var iso = TiledMapBuilder.getIsometric();
 ###Examples
 - [Demo orthogonal: EasterIsland](http://crafty.kibo.cz/tiled2Demo/examples/OrthogonalEasterIsland)
 - [Demo orthogonal: Sea](http://crafty.kibo.cz/tiled2Demo/examples/OrthogonalSea)
-- [Demo isometric: Meadow](http://crafty.kibo.cz/tiled2Demo/examples/IsometricDiamod)
+- [Demo isometric: Meadow](http://crafty.kibo.cz/tiled2Demo/examples/IsometricDiamond)
 - [Demo staggered: Forest](http://htmlpreview.github.com/?https://raw.github.com/Kibo/TiledMapBuilder/master/WebContent/examples/IsometricStaggered/index.html)
 
 
