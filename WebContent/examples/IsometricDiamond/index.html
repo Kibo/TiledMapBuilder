@@ -63,15 +63,14 @@
 					//Set z-index for correct view: front, back
 					for (var obstacle = 0; obstacle < tiledmap.getLayer('stoneTop').length; obstacle++){
 						tiledmap.getLayer('stoneTop')[obstacle]														
-							.z = Math.floor(tiledmap.getLayer('stoneTop')[obstacle]._y);			
+							.z = Math.floor(tiledmap.getLayer('stoneTop')[obstacle]._y );			
 					}
 					
 					//Set z-index for correct view: front, back
 					for (var obstacle = 0; obstacle < tiledmap.getLayer('treeTop').length; obstacle++){
 						tiledmap.getLayer('treeTop')[obstacle]														
-							.z = Math.floor(tiledmap.getLayer('treeTop')[obstacle]._y);						
-					}
-					
+							.z = Math.floor(tiledmap.getLayer('treeTop')[obstacle]._y + tiledmap.getLayer('treeTop')[obstacle]._h);						
+					}					
 				});
 															
 				Crafty.e("2D, DOM, SpriteAnimation, Ogre, Multiway, Keyboard, Collision").attr({x:0, y:HEIGHT/2})					
@@ -86,7 +85,7 @@
 							this.attr({x: from.x, y:from.y});						
 						}
   			   			//set z-index  
-  			   			this.z = Math.floor(this._y) + Math.floor(this._h/4);  			   					  			   		  			   			  			   
+  			   			this.z = Math.floor(this._y + this._h/2);  			   					  			   		  			   			  			   
   			   		})
   			   		.bind("NewDirection",
 					    function (direction) {
