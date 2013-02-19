@@ -21,6 +21,12 @@
   			Crafty.init();  
   			Crafty.viewport.init(WIDTH, HEIGHT);
   			Crafty.scene("Load", function() {
+  				  				
+  				Crafty.background("#000");
+  			    Crafty.e("2D, DOM, Text").attr({ w: WIDTH, h: 20, x: 0, y: HEIGHT/2 })
+  			            .text("Loading...")
+  			            .css({ "text-align": "center" });
+  				
   								  			
   				 Crafty.load([
   				            "img/Terrain_tileset.png",

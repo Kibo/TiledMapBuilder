@@ -15,8 +15,15 @@
     <script src="../../tiledmapbuilder.js"></script>     
 	<script>
   		window.onload = function() {  			   				     			  			  			  			  		  
-  			Crafty.init(320, 320);  			  		
+  			var WIDTH = 320;
+  			var HEIGHT = 320;
+  			Crafty.init(WIDTH, HEIGHT);  			  		
   			Crafty.scene("Load", function() {
+  				
+  				Crafty.background("#000");
+  			    Crafty.e("2D, DOM, Text").attr({ w:WIDTH, h: 20, x: 0, y: HEIGHT/2 })
+  			            .text("Loading...")
+  			            .css({ "text-align": "center" });
 				
   				//Preload sprites first
   				 Crafty.load([
