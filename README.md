@@ -13,7 +13,7 @@ A Tiled map (http://mapeditor.org) importer for Crafty.js (http://craftyjs.com)
 - [tested code](https://github.com/Kibo/TiledMapBuilder/blob/master/WebContent/test/tests.html)
 
 ###Todo:
-Trasfer Tiled Map editor object to Crafty.polygon, Crafty.circle.
+Trasfer Tiled Map editor objects to Crafty.polygon, Crafty.circle.
 
 ###Usage:
 
@@ -86,7 +86,7 @@ var iso = TiledMapBuilder.getIsometric();
 
 ![Crafty HTML5 game](https://raw.github.com/Kibo/TiledMapBuilder/master/WebContent/img/game1.png)
 ![Crafty HTML5 game](https://raw.github.com/Kibo/TiledMapBuilder/master/WebContent/img/game2.png)
-![Crafty HTML5 game](https://raw.github.com/Kibo/TiledMapBuilder/master/WebContent/img/deamond.png)
+![Crafty HTML5 game](https://raw.github.com/Kibo/TiledMapBuilder/master/WebContent/img/diamondDemo.png)
 ![Crafty HTML5 game](https://raw.github.com/Kibo/TiledMapBuilder/master/WebContent/img/staggered.png)
 
 

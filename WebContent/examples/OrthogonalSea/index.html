@@ -95,26 +95,26 @@
 						  			   													
 					})									
 					.bind("NewDirection",
-							function (direction) {
-				        if (direction.x < 0) {
-				            if (!this.isPlaying("walk_left"))
-				                this.stop().animate("walk_left", 10, -1);
-				        }
-				        if (direction.x > 0) {
-				            if (!this.isPlaying("walk_right"))
-				                this.stop().animate("walk_right", 10, -1);
-				        }
-				        if (direction.y < 0) {
-				            if (!this.isPlaying("walk_up"))
-				                this.stop().animate("walk_up", 10, -1);
-				        }
-				        if (direction.y > 0) {
-				            if (!this.isPlaying("walk_down"))
-				                this.stop().animate("walk_down", 10, -1);
-				        }
-				        if(!direction.x && !direction.y) {
-				            this.stop();
-				        }
+						function (direction) {
+					        if (direction.x < 0) {
+					            if (!this.isPlaying("walk_left"))
+					                this.stop().animate("walk_left", 10, -1);
+					        }
+					        if (direction.x > 0) {
+					            if (!this.isPlaying("walk_right"))
+					                this.stop().animate("walk_right", 10, -1);
+					        }
+					        if (direction.y < 0) {
+					            if (!this.isPlaying("walk_up"))
+					                this.stop().animate("walk_up", 10, -1);
+					        }
+					        if (direction.y > 0) {
+					            if (!this.isPlaying("walk_down"))
+					                this.stop().animate("walk_down", 10, -1);
+					        }
+					        if(!direction.x && !direction.y) {
+					            this.stop();
+					        }
 					})  			   		
   			});  			  													
   	}	

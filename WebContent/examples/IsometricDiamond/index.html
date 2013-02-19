@@ -14,53 +14,104 @@
     <script src="js/source.js"></script> 
     <script src="../../tiledmapbuilder.js"></script>    
 	<script>
-  		window.onload = function() { 
-  			var TILE_WIDTH = 64;
-  			var TILE_HEIGHT = 32;
-  			var WIDTH = 640;
-  			var HEIGHT = 340;
-  			Crafty.init(WIDTH, HEIGHT);  
+  		window.onload = function() {   			
+  			var WIDTH = 400;
+  			var HEIGHT = 400;
+  			var SPEED = 1;
+  			Crafty.init();  
   			Crafty.viewport.init(WIDTH, HEIGHT);
   			Crafty.scene("Load", function() {
-				  				
+  								  			
   				 Crafty.load([
-  				            "img/isometric_grass_and_water.png"
+  				            "img/Terrain_tileset.png",
+  				          	"img/player.png"
   				             ], function() {
-  					   					   					 					   					   		
+  					
+  					Crafty.sprite(35,40,"img/player.png", {
+ 						 Ogre:[0,0]
+ 					 });
+  				  					   					   					 					   					   	
   					Crafty.scene("Main");		
   					});  				
   			});
   			
   			Crafty.scene("Load");
   			  			  		
-			Crafty.scene("Main", function () {											
-				Crafty.e("2D, DOM, TiledMapBuilder").createWorld( SOURCE_FROM_TILED_MAP_EDITOR );												
-				Crafty.e("2D, DOM, Color, Keyboard").color("red").attr({x:0, y:HEIGHT/2, w:5, h:5})			
-				.bind("EnterFrame", function (direction) {
-					 if (this.isDown('LEFT_ARROW')) {
-				        	Crafty.viewport.x+=1;
-				        	this.x -=1;
-				            
-				        } else if (this.isDown('RIGHT_ARROW')) {
-				        	Crafty.viewport.x-=1;
-				        	this.x +=1;
-				            
-				        } else if (this.isDown('UP_ARROW')) {
-				        	Crafty.viewport.y+=1;
-				        	this.y -=1;
-				            
-				        } else if (this.isDown('DOWN_ARROW')) {
-				        	Crafty.viewport.y-=1;
-				        	this.y +=1;
-				        }		       
+			Crafty.scene("Main", function () {								
+				Crafty.e("2D, DOM, TiledMapBuilder").createWorld( SOURCE_FROM_TILED_MAP_EDITOR, function(tiledmap){
+					
+					//Stone
+					for (var obstacle = 0; obstacle < tiledmap.getLayer('stones').length; obstacle++){
+						tiledmap.getLayer('stones')[obstacle]
+							.addComponent("Collision, Obstacle")
+							.collision( new Crafty.polygon([0,0],[35,0],[25,15]) );							
+					}
+					
+					//Logs
+					for (var obstacle = 0; obstacle < tiledmap.getLayer('tree').length; obstacle++){
+						tiledmap.getLayer('tree')[obstacle]
+							.addComponent("Collision, Obstacle")
+							.collision( new Crafty.polygon([15,0], [20,0], [20,15], [15,15]));							
+					}
+					
+					//Set z-index for correct view: front, back
+					for (var obstacle = 0; obstacle < tiledmap.getLayer('stoneTop').length; obstacle++){
+						tiledmap.getLayer('stoneTop')[obstacle]														
+							.z = Math.floor(tiledmap.getLayer('stoneTop')[obstacle]._y);			
+					}
+					
+					//Set z-index for correct view: front, back
+					for (var obstacle = 0; obstacle < tiledmap.getLayer('treeTop').length; obstacle++){
+						tiledmap.getLayer('treeTop')[obstacle]														
+							.z = Math.floor(tiledmap.getLayer('treeTop')[obstacle]._y);						
+					}
+					
+				});
+															
+				Crafty.e("2D, DOM, SpriteAnimation, Ogre, Multiway, Keyboard, Collision").attr({x:0, y:HEIGHT/2})					
+					.animate("walk_w", 0, 0, 2)
+  			   		.animate("walk_s", 0, 1, 2)	
+  			   		.animate("walk_q", 0, 3, 2)	
+  			   		.animate("walk_a", 0, 2, 2)	
+  			   		.collision( new Crafty.polygon([0,30],[18,30],[18,40], [0,40]) ) 
+  			   		.multiway(SPEED, {Q: 225, W: -45, S: 45, A: 135})  			   				
+					.bind('Moved', function(from) {					
+  			   			if( this.hit('Obstacle')){
+							this.attr({x: from.x, y:from.y});						
+						}
+  			   			//set z-index  
+  			   			this.z = Math.floor(this._y) + Math.floor(this._h/4);  			   					  			   		  			   			  			   
+  			   		})
+  			   		.bind("NewDirection",
+					    function (direction) {
+					        if (direction.x < 0 && direction.y < 0) {
+					            if (!this.isPlaying("walk_q"))
+					                this.stop().animate("walk_q", 10, -1);
+					        }
+					        if (direction.x > 0 && direction.y > 0) {
+					            if (!this.isPlaying("walk_s"))
+					                this.stop().animate("walk_s", 10, -1);
+					        }
+					        if (direction.x < 0 && direction.y > 0) {
+					            if (!this.isPlaying("walk_a"))
+					                this.stop().animate("walk_a", 10, -1);
+					        }
+					        if (direction.x > 0 && direction.y < 0) {
+					            if (!this.isPlaying("walk_w"))
+					                this.stop().animate("walk_w", 10, -1);
+					        }
+					        if(!direction.x && !direction.y) {
+					            this.stop();
+					        }				      
 					})  		
-				
-				Crafty.viewport.x = WIDTH/2 - TILE_WIDTH/2;	
-				
-				//TODO
+  			   		
+  			   		
+  			   		  			   		
+  			   	// folow player	
+  			   	Crafty.viewport.follow(Crafty("Ogre"), 0, 0);  			   		  			   	
   			});  			  													
   	}	
 	</script>	
-	<p align="center">Use arrows for moving player.</p>
+	<p align="center">Use keys:Q, W, A, S for moving player.</p>
   </body>
 </html>
