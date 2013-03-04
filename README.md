@@ -3,9 +3,9 @@
 A Tiled map (http://mapeditor.org) importer for Crafty.js (http://craftyjs.com)
 
 ###The main features:
-- Draw orthogonal map (see [orthogonal1](http://crafty.kibo.cz/tiled2Demo/examples/OrthogonalEasterIsland), [orthogonal2](http://crafty.kibo.cz/tiled2Demo/examples/OrthogonalSea)).
-- Draw isometric diamond map (see [diamond](http://crafty.kibo.cz/tiled2Demo/examples/IsometricDiamond))
-- Draw isometric staggered map (see [staggered](http://crafty.kibo.cz/tiled2Demo/examples/IsometricStaggered) )
+- Draw orthogonal map (see [orthogonal1](http://kibo.github.com/TiledMapBuilder/examples/OrthogonalEasterIsland/index.html), [orthogonal2](http://kibo.github.com/TiledMapBuilder/examples/OrthogonalSea/index.html)).
+- Draw isometric diamond map (see [diamond](http://kibo.github.com/TiledMapBuilder/examples/IsometricDiamond/index.html))
+- Draw isometric staggered map (see [staggered](http://kibo.github.com/TiledMapBuilder/examples/IsometricStaggered/index.html) )
 
 ###Advantage:
 - no depending on the third party library
@@ -84,17 +84,17 @@ var iso = TiledMapBuilder.getIsometric();
 
 3) Use [Crafty.js](http://craftyjs.com) for building your amazing HTML5 game.
 
-![Crafty HTML5 game](https://raw.github.com/Kibo/TiledMapBuilder/master/WebContent/img/game1.png)
-![Crafty HTML5 game](https://raw.github.com/Kibo/TiledMapBuilder/master/WebContent/img/game2.png)
-![Crafty HTML5 game](https://raw.github.com/Kibo/TiledMapBuilder/master/WebContent/img/diamondDemo.png)
-![Crafty HTML5 game](https://raw.github.com/Kibo/TiledMapBuilder/master/WebContent/img/staggered.png)
+[![Crafty HTML5 game](https://raw.github.com/Kibo/TiledMapBuilder/master/WebContent/img/game1.png)](http://kibo.github.com/TiledMapBuilder/examples/OrthogonalEasterIsland/index.html)
+[![Crafty HTML5 game](https://raw.github.com/Kibo/TiledMapBuilder/master/WebContent/img/game2.png)](http://kibo.github.com/TiledMapBuilder/examples/OrthogonalSea/index.html)
+[![Crafty HTML5 game](https://raw.github.com/Kibo/TiledMapBuilder/master/WebContent/img/diamondDemo.png)](http://kibo.github.com/TiledMapBuilder/examples/IsometricDiamond/index.html)
+[![Crafty HTML5 game](https://raw.github.com/Kibo/TiledMapBuilder/master/WebContent/img/staggered.png)](http://kibo.github.com/TiledMapBuilder/examples/IsometricStaggered/index.html)
 
 
 ###Examples
-- [Demo orthogonal: EasterIsland](http://crafty.kibo.cz/tiled2Demo/examples/OrthogonalEasterIsland)
-- [Demo orthogonal: Sea](http://crafty.kibo.cz/tiled2Demo/examples/OrthogonalSea)
-- [Demo isometric: Meadow](http://crafty.kibo.cz/tiled2Demo/examples/IsometricDiamond)
-- [Demo staggered: River](http://crafty.kibo.cz/tiled2Demo/examples/IsometricStaggered)
+- [Demo orthogonal: EasterIsland](http://kibo.github.com/TiledMapBuilder/examples/OrthogonalEasterIsland/index.html)
+- [Demo orthogonal: Sea](http://kibo.github.com/TiledMapBuilder/examples/OrthogonalSea/index.html)
+- [Demo isometric: Meadow](http://kibo.github.com/TiledMapBuilder/examples/IsometricDiamond/index.html)
+- [Demo staggered: River](http://kibo.github.com/TiledMapBuilder/examples/IsometricStaggered/index.html)
 
 
 **Contact me**
