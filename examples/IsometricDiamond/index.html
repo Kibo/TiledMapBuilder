@@ -20,6 +20,7 @@
   			var SPEED = 1;
   			Crafty.init();  
   			Crafty.viewport.init(WIDTH, HEIGHT);
+  			Crafty.viewport.clampToEntities=false; 
   			Crafty.scene("Load", function() {
   				  				
   				Crafty.background("#000");
@@ -44,8 +45,8 @@
   			Crafty.scene("Load");
   			  			  		
 			Crafty.scene("Main", function () {								
-				Crafty.e("2D, DOM, TiledMapBuilder").createWorld( SOURCE_FROM_TILED_MAP_EDITOR, function(tiledmap){
-					
+				Crafty.e("2D, DOM, TiledMapBuilder").setMapDataSource( SOURCE_FROM_TILED_MAP_EDITOR )
+				.createWorld( function( tiledmap ){											
 					//Stone
 					for (var obstacle = 0; obstacle < tiledmap.getLayer('stones').length; obstacle++){
 						tiledmap.getLayer('stones')[obstacle]

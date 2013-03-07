@@ -44,32 +44,34 @@
   			  			  		
 			Crafty.scene("Main", function () {
 											
-				Crafty.e("2D, DOM, TiledMapBuilder").createWorld( SOURCE_FROM_TILED_MAP_EDITOR, function( tiledmap ){
+				Crafty.e("2D, DOM, TiledMapBuilder").setMapDataSource( SOURCE_FROM_TILED_MAP_EDITOR )
+				.createWorld( function( tiledmap ){
 					
 					//Obstacles
 					for (var obstacle = 0; obstacle < tiledmap.getLayer('obstacles').length; obstacle++){
 						tiledmap.getLayer('obstacles')[obstacle]
-							.addComponent("Collision, Obstacle")
+							.addComponent("Collision")
 							.collision();							
 					}
 					
 					//head1
 					for (var head = 0; head < tiledmap.getLayer('head1').length; head++){
 						tiledmap.getLayer('head1')[head]						
-						.attr({z:100});	
+						.z = Math.floor(tiledmap.getLayer('head1')[head]._y + tiledmap.getLayer('head1')[head]._h);	
 					}
+					tiledmap.getLayer('head1')[0].z = Math.floor(tiledmap.getLayer('head1')[0]._y + 2*tiledmap.getLayer('head1')[0]._h);	
+					tiledmap.getLayer('head1')[1].z = Math.floor(tiledmap.getLayer('head1')[1]._y + 2*tiledmap.getLayer('head1')[1]._h);
 					
 					//head2
 					for (var head = 0; head < tiledmap.getLayer('head2').length; head++){
 						tiledmap.getLayer('head2')[head]						
-						.attr({z:100});													
+						.z = Math.floor(tiledmap.getLayer('head2')[head]._y + tiledmap.getLayer('head2')[head]._h);												
 					}
+					tiledmap.getLayer('head2')[0].z = Math.floor(tiledmap.getLayer('head2')[0]._y + 2*tiledmap.getLayer('head2')[0]._h);	
+					tiledmap.getLayer('head2')[1].z = Math.floor(tiledmap.getLayer('head2')[1]._y + 2*tiledmap.getLayer('head2')[1]._h);
 																		
 				});
-																	
-				var chin1 = Crafty("TiledMapBuilder").getTile("head1", 7, 3); //layerName, row, column
-				var chin2 = Crafty("TiledMapBuilder").getTile("head2", 5, 6); //layerName, row, column
-																
+																																			
 				//Player
 				Crafty.e("2D, DOM, Fourway, SpriteAnimation, Ogre, Collision")
   			   		.attr({x: 150, y: 50, z: 10}) 
@@ -80,40 +82,11 @@
   			   		.fourway(2)  			   					
   			   		.collision( new Crafty.polygon([10,60],[40,60],[40,67],[10,67]) )
   			   		.bind('Moved', function(from) {
-						if( this.hit('Obstacle') ){
+						if( this.hit('obstacles') ){
 							this.attr({x: from.x, y:from.y});
-						}									
-					})
-					.bind('EnterFrame', function() {
-						
-						if( chin1._z == 100 && chin1._y < this._y){						
-							for(var head = 0; head < Crafty("TiledMapBuilder").getLayer('head1').length; head++){
-								Crafty("TiledMapBuilder").getLayer('head1')[head].z = 5;	
-							}	
-							console.log("chin1");
-						}	
-						
-						if( chin1._z == 5 && chin1._y > this._y){						
-							for(var head = 0; head < Crafty("TiledMapBuilder").getLayer('head1').length; head++){
-								Crafty("TiledMapBuilder").getLayer('head1')[head].z = 100;	
-							}
-							console.log("chin1");
-						}
-						
-						if( chin2._z == 100 && chin2._y < this._y){						
-							for(var head = 0; head < Crafty("TiledMapBuilder").getLayer('head2').length; head++){
-								Crafty("TiledMapBuilder").getLayer('head2')[head].z = 5;	
-							}	
-							console.log("chin2");
-						}	
-						
-						if( chin2._z == 5 && chin2._y > this._y){						
-							for(var head = 0; head < Crafty("TiledMapBuilder").getLayer('head2').length; head++){
-								Crafty("TiledMapBuilder").getLayer('head2')[head].z = 100;	
-							}
-							console.log("chin2");
-						}																	
-					})													
+						}							
+						this.z = Math.floor(this._y + this._h);  
+					})																
 					.bind("NewDirection",
 					    function (direction) {
 					        if (direction.x < 0) {
