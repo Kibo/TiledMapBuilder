@@ -22,20 +22,19 @@ Set data source
 Crafty.e("2D, DOM, TiledMapBuilder").setMapDataSource( SOURCE_FROM_TILED_MAP_EDITOR );    
 ```
 
+
 Create world
 ```
-Crafty.e("2D, DOM, TiledMapBuilder")
-	.setMapDataSource( SOURCE_FROM_TILED_MAP_EDITOR )
-	.createWorld( function( map ){
-		console.log("done");
+TiledMapBuilder.createWorld( function( map ){
+	console.log("done");
 	});    
 ```
 
+
 Create a view
-Crafty.e("2D, DOM, TiledMapBuilder")
-	.setMapDataSource( SOURCE_FROM_TILED_MAP_EDITOR )
-	.createView( startRow, startColumn, viewWidth, viewHeight, function( map ){
-		console.log("done");
+```
+TiledMapBuilder.createView( startRow, startColumn, viewWidth, viewHeight, function( map ){
+	console.log("done");
 	});    
 ```
 
