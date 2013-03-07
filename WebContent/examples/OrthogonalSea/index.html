@@ -45,8 +45,8 @@
   			  			  		
 			Crafty.scene("Main", function () {
 											
-				Crafty.e("2D, DOM, TiledMapBuilder").createWorld( SOURCE_FROM_TILED_MAP_EDITOR, function( tiledmap ){
-										
+				Crafty.e("2D, DOM, TiledMapBuilder").setMapDataSource( SOURCE_FROM_TILED_MAP_EDITOR )
+				.createWorld( function( tiledmap ){															
 					//Fence
 					for (var fence = 0; fence < tiledmap.getLayer('fence').length; fence++){
 						tiledmap.getLayer('fence')[fence]

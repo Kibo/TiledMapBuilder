@@ -1,4 +1,4 @@
-# TiledMapBuilder v0.8.6
+# TiledMapBuilder v0.9.0
 
 A Tiled map (http://mapeditor.org) importer for Crafty.js (http://craftyjs.com)
 
@@ -17,15 +17,24 @@ Trasfer Tiled Map editor objects to Crafty.polygon, Crafty.circle.
 
 ###Usage:
 
-Build a tiled map
+Set data source
 ```
-Crafty.e("2D, DOM, TiledMapBuilder").createWorld( SOURCE_FROM_TILED_MAP_EDITOR );    
+Crafty.e("2D, DOM, TiledMapBuilder").setMapDataSource( SOURCE_FROM_TILED_MAP_EDITOR );    
 ```
-or with callback
 
+Create world
 ```
 Crafty.e("2D, DOM, TiledMapBuilder")
-	.createWorld( SOURCE_FROM_TILED_MAP_EDITOR, function( map ){
+	.setMapDataSource( SOURCE_FROM_TILED_MAP_EDITOR )
+	.createWorld( function( map ){
+		console.log("done");
+	});    
+```
+
+Create a view
+Crafty.e("2D, DOM, TiledMapBuilder")
+	.setMapDataSource( SOURCE_FROM_TILED_MAP_EDITOR )
+	.createView( startRow, startColumn, viewWidth, viewHeight, function( map ){
 		console.log("done");
 	});    
 ```
@@ -42,7 +51,7 @@ var layers = TiledMapBuilder.getLayers();
 
 Get the tile
 ```
-var tile = TiledMapBuilder.getTile( layerName, row, column );
+var tile = TiledMapBuilder.getTile( row, column, layerName );
 ```
 
 Get render method: DOM or Canvas

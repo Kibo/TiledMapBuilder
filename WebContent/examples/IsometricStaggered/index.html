@@ -20,6 +20,7 @@
   			var SPEED = 1;
   			Crafty.init(WIDTH, HEIGHT);  
   			Crafty.viewport.init(WIDTH, HEIGHT );
+  			Crafty.viewport.clampToEntities=false; 
   			Crafty.scene("Load", function() {
   				
   				Crafty.background("#000");
@@ -45,7 +46,9 @@
   			  			  		
 			Crafty.scene("Main", function () {	
 				
-				Crafty.e("2D, DOM, TiledMapBuilder").createWorld( SOURCE_FROM_TILED_MAP_EDITOR, function(tiledmap){
+				Crafty.e("2D, DOM, TiledMapBuilder")
+				.setMapDataSource( SOURCE_FROM_TILED_MAP_EDITOR )
+				.createWorld( function( tiledmap ){
 				
 					//Roots
 					for (var obstacle = 0; obstacle < tiledmap.getLayer('root').length; obstacle++){
@@ -78,10 +81,7 @@
 				
 				Crafty("TiledMapBuilder").getLayer('lead')[0].addComponent("Collision, Obstacle").collision( new Crafty.polygon([0,0], [30,0], [0,10]));
 				Crafty("TiledMapBuilder").getLayer('lead')[1].addComponent("Collision, Obstacle").collision( new Crafty.polygon([0,-10], [20,0], [0,10], [-20,0]));
-				
-				//Crafty("TiledMapBuilder")
-				// end Bridge
-															
+																					
 				Crafty.e("2D, DOM, SpriteAnimation, Ogre, Multiway, Keyboard, Collision").attr({x:WIDTH/4, y:HEIGHT/2})					
 				.animate("walk_w", 0, 0, 2)
 			   		.animate("walk_s", 0, 1, 2)	
