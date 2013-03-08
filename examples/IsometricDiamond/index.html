@@ -48,29 +48,29 @@
 				Crafty.e("2D, DOM, TiledMapBuilder").setMapDataSource( SOURCE_FROM_TILED_MAP_EDITOR )
 				.createWorld( function( tiledmap ){											
 					//Stone
-					for (var obstacle = 0; obstacle < tiledmap.getLayer('stones').length; obstacle++){
-						tiledmap.getLayer('stones')[obstacle]
+					for (var obstacle = 0; obstacle < tiledmap.getEntitiesInLayer('stones').length; obstacle++){
+						tiledmap.getEntitiesInLayer('stones')[obstacle]
 							.addComponent("Collision, Obstacle")
 							.collision( new Crafty.polygon([0,0],[35,0],[25,15]) );							
 					}
 					
 					//Logs
-					for (var obstacle = 0; obstacle < tiledmap.getLayer('tree').length; obstacle++){
-						tiledmap.getLayer('tree')[obstacle]
+					for (var obstacle = 0; obstacle < tiledmap.getEntitiesInLayer('tree').length; obstacle++){
+						tiledmap.getEntitiesInLayer('tree')[obstacle]
 							.addComponent("Collision, Obstacle")
 							.collision( new Crafty.polygon([15,0], [20,0], [20,15], [15,15]));							
 					}
 					
 					//Set z-index for correct view: front, back
-					for (var obstacle = 0; obstacle < tiledmap.getLayer('stoneTop').length; obstacle++){
-						tiledmap.getLayer('stoneTop')[obstacle]														
-							.z = Math.floor(tiledmap.getLayer('stoneTop')[obstacle]._y );			
+					for (var obstacle = 0; obstacle < tiledmap.getEntitiesInLayer('stoneTop').length; obstacle++){
+						tiledmap.getEntitiesInLayer('stoneTop')[obstacle]														
+							.z = Math.floor(tiledmap.getEntitiesInLayer('stoneTop')[obstacle]._y );			
 					}
 					
 					//Set z-index for correct view: front, back
-					for (var obstacle = 0; obstacle < tiledmap.getLayer('treeTop').length; obstacle++){
-						tiledmap.getLayer('treeTop')[obstacle]														
-							.z = Math.floor(tiledmap.getLayer('treeTop')[obstacle]._y + tiledmap.getLayer('treeTop')[obstacle]._h);						
+					for (var obstacle = 0; obstacle < tiledmap.getEntitiesInLayer('treeTop').length; obstacle++){
+						tiledmap.getEntitiesInLayer('treeTop')[obstacle]														
+							.z = Math.floor(tiledmap.getEntitiesInLayer('treeTop')[obstacle]._y + tiledmap.getEntitiesInLayer('treeTop')[obstacle]._h);						
 					}					
 				});
 															

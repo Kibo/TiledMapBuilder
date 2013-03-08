@@ -48,28 +48,27 @@
 				.createWorld( function( tiledmap ){
 					
 					//Obstacles
-					for (var obstacle = 0; obstacle < tiledmap.getLayer('obstacles').length; obstacle++){
-						tiledmap.getLayer('obstacles')[obstacle]
+					for (var obstacle = 0; obstacle < tiledmap.getEntitiesInLayer('obstacles').length; obstacle++){
+						tiledmap.getEntitiesInLayer('obstacles')[obstacle]
 							.addComponent("Collision")
 							.collision();							
 					}
 					
 					//head1
-					for (var head = 0; head < tiledmap.getLayer('head1').length; head++){
-						tiledmap.getLayer('head1')[head]						
-						.z = Math.floor(tiledmap.getLayer('head1')[head]._y + tiledmap.getLayer('head1')[head]._h);	
+					for (var head = 0; head < tiledmap.getEntitiesInLayer('head1').length; head++){
+						tiledmap.getEntitiesInLayer('head1')[head]						
+						.z = Math.floor(tiledmap.getEntitiesInLayer('head1')[head]._y + tiledmap.getEntitiesInLayer('head1')[head]._h);	
 					}
-					tiledmap.getLayer('head1')[0].z = Math.floor(tiledmap.getLayer('head1')[0]._y + 2*tiledmap.getLayer('head1')[0]._h);	
-					tiledmap.getLayer('head1')[1].z = Math.floor(tiledmap.getLayer('head1')[1]._y + 2*tiledmap.getLayer('head1')[1]._h);
+					tiledmap.getEntitiesInLayer('head1')[0].z = Math.floor(tiledmap.getEntitiesInLayer('head1')[0]._y + 2*tiledmap.getEntitiesInLayer('head1')[0]._h);	
+					tiledmap.getEntitiesInLayer('head1')[1].z = Math.floor(tiledmap.getEntitiesInLayer('head1')[1]._y + 2*tiledmap.getEntitiesInLayer('head1')[1]._h);
 					
 					//head2
-					for (var head = 0; head < tiledmap.getLayer('head2').length; head++){
-						tiledmap.getLayer('head2')[head]						
-						.z = Math.floor(tiledmap.getLayer('head2')[head]._y + tiledmap.getLayer('head2')[head]._h);												
+					for (var head = 0; head < tiledmap.getEntitiesInLayer('head2').length; head++){
+						tiledmap.getEntitiesInLayer('head2')[head]						
+						.z = Math.floor(tiledmap.getEntitiesInLayer('head2')[head]._y + tiledmap.getEntitiesInLayer('head2')[head]._h);												
 					}
-					tiledmap.getLayer('head2')[0].z = Math.floor(tiledmap.getLayer('head2')[0]._y + 2*tiledmap.getLayer('head2')[0]._h);	
-					tiledmap.getLayer('head2')[1].z = Math.floor(tiledmap.getLayer('head2')[1]._y + 2*tiledmap.getLayer('head2')[1]._h);
-																		
+					tiledmap.getEntitiesInLayer('head2')[0].z = Math.floor(tiledmap.getEntitiesInLayer('head2')[0]._y + 2*tiledmap.getEntitiesInLayer('head2')[0]._h);	
+					tiledmap.getEntitiesInLayer('head2')[1].z = Math.floor(tiledmap.getEntitiesInLayer('head2')[1]._y + 2*tiledmap.getEntitiesInLayer('head2')[1]._h);																	
 				});
 																																			
 				//Player

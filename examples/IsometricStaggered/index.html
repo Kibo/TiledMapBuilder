@@ -51,23 +51,23 @@
 				.createWorld( function( tiledmap ){
 				
 					//Roots
-					for (var obstacle = 0; obstacle < tiledmap.getLayer('root').length; obstacle++){
-						tiledmap.getLayer('root')[obstacle]
+					for (var obstacle = 0; obstacle < tiledmap.getEntitiesInLayer('root').length; obstacle++){
+						tiledmap.getEntitiesInLayer('root')[obstacle]
 							.addComponent("Collision, Obstacle")
 							.collision( new Crafty.polygon([10,5],[30,5],[30,15], [10,15]) );							
 					}
 					
 					//Water
-					for (var obstacle = 0; obstacle < tiledmap.getLayer('water').length; obstacle++){
-						tiledmap.getLayer('water')[obstacle]
+					for (var obstacle = 0; obstacle < tiledmap.getEntitiesInLayer('water').length; obstacle++){
+						tiledmap.getEntitiesInLayer('water')[obstacle]
 							.addComponent("Collision, Obstacle")
 							.collision();							
 					}
 																															
 					//Set z-index for correct view: front, back
-					for (var obstacle = 0; obstacle < tiledmap.getLayer('treeTop').length; obstacle++){
-						tiledmap.getLayer('treeTop')[obstacle]														
-							.z = Math.floor(tiledmap.getLayer('treeTop')[obstacle]._y + tiledmap.getLayer('treeTop')[obstacle]._h);						
+					for (var obstacle = 0; obstacle < tiledmap.getEntitiesInLayer('treeTop').length; obstacle++){
+						tiledmap.getEntitiesInLayer('treeTop')[obstacle]														
+							.z = Math.floor(tiledmap.getEntitiesInLayer('treeTop')[obstacle]._y + tiledmap.getEntitiesInLayer('treeTop')[obstacle]._h);						
 					}
 																		
 				});
@@ -79,8 +79,8 @@
 				Crafty.e("2D, DOM, Bridge, Collision").attr({x:0, y:0, w:WIDTH, h:HEIGHT})				
 				.collision( new Crafty.polygon([331,209], [349,185], [331,209]))
 				
-				Crafty("TiledMapBuilder").getLayer('lead')[0].addComponent("Collision, Obstacle").collision( new Crafty.polygon([0,0], [30,0], [0,10]));
-				Crafty("TiledMapBuilder").getLayer('lead')[1].addComponent("Collision, Obstacle").collision( new Crafty.polygon([0,-10], [20,0], [0,10], [-20,0]));
+				Crafty("TiledMapBuilder").getEntitiesInLayer('lead')[0].addComponent("Collision, Obstacle").collision( new Crafty.polygon([0,0], [30,0], [0,10]));
+				Crafty("TiledMapBuilder").getEntitiesInLayer('lead')[1].addComponent("Collision, Obstacle").collision( new Crafty.polygon([0,-10], [20,0], [0,10], [-20,0]));
 																					
 				Crafty.e("2D, DOM, SpriteAnimation, Ogre, Multiway, Keyboard, Collision").attr({x:WIDTH/4, y:HEIGHT/2})					
 				.animate("walk_w", 0, 0, 2)

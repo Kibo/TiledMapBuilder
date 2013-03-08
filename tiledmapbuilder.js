@@ -4,17 +4,13 @@
 * A Tiled map (http://mapeditor.org) importer for Crafty.js ( http://craftyjs.com)
 * It creates a tiled world on the basis of exported JSON file from Tiled Map Editor.
 * It also provides methods to access to tiles, layers, tilesets. 
-* @example
-* ~~~
-* Crafty.e("2D, DOM, TiledMapBuilder")
-* 	.createWorld( tiledMapEditorSourceObject )
-* ~~~
+*
 * @see http://www.mapeditor.org/ - Tiled Map Editor
 * @author Tomas Jurman (tomasjurman@gmail.com)
 */
 Crafty.c("TiledMapBuilder", {  	  				
 		
-	 constant: {
+	tileMapBuilderSetting: {
 		 ISOMETRIC_DIAMOND		:'isometric',
 		 ISOMETRIC_STAGGERED	:'staggered',
 		 ORTHOGONAL				:'orthogonal',
@@ -24,20 +20,15 @@ Crafty.c("TiledMapBuilder", {
 	
 	_renderMethod: null,
 	_isometric:null,
-	_layers: {},	
-	_startRow:null,
-	_startColumn:null,
-	_viewWidth:null,
-	_viewHeight:null,	
+	_layers: null,	
     init: function() {    			    	  			    
-    	this._renderMethod = this.has(this.constant.RENDER_METHOD_CANVAS) ? 
-    			this.constant.RENDER_METHOD_CANVAS : 
-    			this.constant.RENDER_METHOD_DOM;	
+    	this._renderMethod = this.has(this.tileMapBuilderSetting.RENDER_METHOD_CANVAS) ? 
+    			this.tileMapBuilderSetting.RENDER_METHOD_CANVAS : 
+    			this.tileMapBuilderSetting.RENDER_METHOD_DOM;	
     			    	
     	return this;
     },
-    
-    
+        
     /**@
 	 * #TiledMapBuilder.setMapDataSource
 	 * Set a data source for tiled map.
@@ -54,6 +45,7 @@ Crafty.c("TiledMapBuilder", {
     	}
     	
     	this._source = source;
+    	
     	if( this.isIsometric() ){
     		this.setIsometric( source );
     	}
@@ -86,13 +78,8 @@ Crafty.c("TiledMapBuilder", {
 	 * @return {Object} this   			
 	 */
 	createView: function( startRow, startColumn, viewWidth, viewHeight, callback ){
-		
-    	this._startRow = startRow;
-    	this._startColumn = startColumn;
-    	this._viewWidth = viewWidth;
-    	this._viewHeight = viewHeight;
-    	    	            	  
-    	this.createEntities( this._source );
+		    	    	            	 
+		this._layers = this.createEntities( {startRow:startRow, startColumn:startColumn, viewWidth:viewWidth, viewHeight:viewHeight, source:this._source} );
         	    	     	            
     	if(typeof callback != 'undefined'){
     		callback.call(this, this);
@@ -110,12 +97,11 @@ Crafty.c("TiledMapBuilder", {
 	 *
 	 * @see http://www.mapeditor.org/ - Tiled Map Editor		
 	 */
-	getLayer:function( layerName ){
-		
+	getEntitiesInLayer:function( layerName ){ 	
 		if(!this.isLayer( layerName )){
 			return null;
 		}
-		
+				
 		var entities = [];		
 		for( var idx = 0; idx < this._layers[layerName].length; idx++){
 			if( this._layers[layerName][idx] != 0 ){
@@ -134,12 +120,11 @@ Crafty.c("TiledMapBuilder", {
 	 * @param	Integer column - number of column from tiled matrix, range: 0-n	
 	 * @return	Object<Crafty.e> tile 
 	 */
-	getTile: function( row, column, layerName ){
-		
+	getTile: function( row, column, layerName ){		
 		if(!this.isLayer( layerName )){
 			return null;
 		}
-				
+		
 		return this._layers[layerName][this.getTileIndex( row, column, this.getLayerFromSource(layerName))];
 	},
 		
@@ -201,8 +186,8 @@ Crafty.c("TiledMapBuilder", {
 	 * @return	boolean true or false		
 	 */
     isIsometric:function(){
-    	return this._source.orientation == this.constant.ISOMETRIC_DIAMOND || 
-    		this._source.orientation == this.constant.ISOMETRIC_STAGGERED;
+    	return this._source.orientation == this.tileMapBuilderSetting.ISOMETRIC_DIAMOND || 
+    		this._source.orientation == this.tileMapBuilderSetting.ISOMETRIC_STAGGERED;
     },
     
     /**@
@@ -295,31 +280,35 @@ Crafty.c("TiledMapBuilder", {
 	/*
 	 * Create Crafty.entities
 	 * 
-	 * @param {Object} source - object from JSON file exported by Tiled Map Editor		
+	 * @param {Object} crate, contains:(startRow, startColumn, viewWidth, viewHeight, source)
+	 * @return {Object} layers, contains entities		
 	 */
-    createEntities: function( source ){				
-		for(var layer = 0; layer < source.layers.length; layer++){
-			var entities = this.createEntitiesInLayer( source.layers[layer] );
-			this._layers[source.layers[layer].name] = entities;			
-		}				
+    createEntities: function( crate ){
+    	var layers = {};
+		for(var layer = 0; layer < crate.source.layers.length; layer++){
+			var entities = this.createEntitiesInLayer( crate, crate.source.layers[layer] );
+			layers[crate.source.layers[layer].name] = entities;			
+		}	
+		
+		return layers;
 	},
 	
 	/*
 	 * Create Crafty.entities in layer
-	 * 
+	 *
+	 * @param {Object} crate, contains:(startRow, startColumn, viewWidth, viewHeight, source)
 	 * @param {Object} layer		
 	 */
-	createEntitiesInLayer: function( layer ){			
-		var indexes = this.getIndexes(this._startRow, this._startColumn, this._viewWidth, this._viewHeight, layer);
+	createEntitiesInLayer: function( crate, layer ){			
+		var indexes = this.getIndexes(crate, layer);
 		
 		var entities = [];
 		for(var i = 0; i < indexes.length; i++){	
 			
 			if( layer.data[indexes[i]] == 0 ){
 				entities.push(0);
-			}else{
-				var entity = this.createEntity( layer, indexes[i] );										
-				entities.push( entity );
+			}else{											
+				entities.push( this.createEntity( crate, layer, indexes[i] ) );
 			}						
 		}				
 		return entities;
@@ -328,50 +317,50 @@ Crafty.c("TiledMapBuilder", {
 	/*
 	 * Create Crafty.entity
 	 * 
+	 * @param {Object} crate, contains:(startRow, startColumn, viewWidth, viewHeight, source)
 	 * @param {Object} layer
 	 * @param {Integer} dataIndex	
-	 * @return {Object} Crafty.entity
-	 * 
-	 * @see http://craftyjs.com/api/Crafty-e.html - Crafty.entity
+	 * @return {Object} Crafty.entity 
 	 */
-	createEntity:function(layer, dataIndex){			
+	createEntity:function( crate, layer, dataIndex){			
 		var column = dataIndex % layer.width;
 		var row = Math.floor((dataIndex / layer.width));								
 		var entity = Crafty.e("2D," + this.getRenderMethod() + ", Tile" + layer.data[dataIndex] + ", " + layer.name);
-		this.setPosition( entity, column, row);
+		this.setPosition( crate, entity, column, row);
 		return entity;
 	},
 			
 	/*
 	 * Set position of entity
 	 * 
+	 * @param {Object} crate, contains:(startRow, startColumn, viewWidth, viewHeight, source)
 	 * @param {Object} Crafty.entity
 	 * @param {Integer} column
 	 * @param {Integer} row
 	 
 	 */
-	setPosition:function( entity, column, row){		
+	setPosition:function( crate, entity, column, row){		
 		
 		switch(this.getOrientation()){
-			case this.constant.ORTHOGONAL:
-				entity.x = column * this._source.tilewidth;
-				entity.y = row * this._source.tileheight;
+			case this.tileMapBuilderSetting.ORTHOGONAL:
+				entity.x = column * crate.source.tilewidth;
+				entity.y = row * crate.source.tileheight;
 				break;
-			case this.constant.ISOMETRIC_DIAMOND:				
-				var x = (column - row) * (this._source.tilewidth/2);
-				var y = (column + row) * (this._source.tileheight/2);					
+			case this.tileMapBuilderSetting.ISOMETRIC_DIAMOND:				
+				var x = (column - row) * (crate.source.tilewidth/2);
+				var y = (column + row) * (crate.source.tileheight/2);					
 				var positions = this.getIsometric().px2pos(x,y);
 				
 				//TODO - do custom px2pos for diamond map
 				this.getIsometric().place( -positions.x, -positions.y, 0, entity);					
 				break;
 				
-			case this.constant.ISOMETRIC_STAGGERED:
+			case this.tileMapBuilderSetting.ISOMETRIC_STAGGERED:
 				this.getIsometric().place( column, row, 0, entity);				
 				break;
 											
 			default:
-				 throw new Error("Orientation of map " + this.getOrientation() + "is not supported.");
+				throw new Error("Orientation of map " + this.getOrientation() + "is not supported.");
 		}						
 	},
 			
@@ -418,25 +407,20 @@ Crafty.c("TiledMapBuilder", {
 		}
 		return null;				
 	},
-	
-
-    
+	  
     /*
 	* Return indexes from source data
-	* 
-	* @param {Integer} startRow, 0-n
-	* @param {Integer} startColumn, 0-n
-	* @param {Integer} width in tile
-	* @param {Integer} height in tile
+	* 	
+	* @param {Object} crate, contains:(startRow, startColumn, viewWidth, viewHeight, source)
 	* @param {Object} layer
 	* @return {Array} indexes - [0,1,10,11,12,15,20,21,22,23,24,25,26]	
 	*/
-    getIndexes:function( startRow, startColumn, viewWidth, viewHeight, layer ){
+    getIndexes:function( crate, layer ){    	
     	var idxs = [];
     	
-    	for(var row = startRow ; row < (startRow + viewHeight); row++ ){
-    		var indexOfStartTile = this.getTileIndex(row, startColumn, layer);     		
-    		idxs = idxs.concat(  this.makeSequence(indexOfStartTile, indexOfStartTile + viewWidth));    		
+    	for(var row = crate.startRow ; row < (crate.startRow + crate.viewHeight); row++ ){
+    		var indexOfStartTile = this.getTileIndex(row, crate.startColumn, layer);     		
+    		idxs = idxs.concat(  this.makeSequence(indexOfStartTile, indexOfStartTile + crate.viewWidth));    		
     	}    	   
     	return idxs;
     },
