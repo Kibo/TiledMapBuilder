@@ -48,22 +48,22 @@
 				Crafty.e("2D, DOM, TiledMapBuilder").setMapDataSource( SOURCE_FROM_TILED_MAP_EDITOR )
 				.createWorld( function( tiledmap ){															
 					//Fence
-					for (var fence = 0; fence < tiledmap.getLayer('fence').length; fence++){
-						tiledmap.getLayer('fence')[fence]
+					for (var fence = 0; fence < tiledmap.getEntitiesInLayer('fence').length; fence++){
+						tiledmap.getEntitiesInLayer('fence')[fence]
 							.addComponent("Collision, Fence")
 							.collision();							
 					}
 					
 					//Obstacles
-					for (var obstacle = 0; obstacle < tiledmap.getLayer('obstacles').length; obstacle++){
-						tiledmap.getLayer('obstacles')[obstacle]
+					for (var obstacle = 0; obstacle < tiledmap.getEntitiesInLayer('obstacles').length; obstacle++){
+						tiledmap.getEntitiesInLayer('obstacles')[obstacle]
 							.addComponent("Collision, Obstacle")
 							.collision( new Crafty.polygon([5,5],[28,5],[28,28],[5,28]) );	//You can set the exact boundaries						
 					}	
 					
 					//Water
-					for (var water = 0; water < tiledmap.getLayer('water').length; water++){
-						tiledmap.getLayer('water')[water]
+					for (var water = 0; water < tiledmap.getEntitiesInLayer('water').length; water++){
+						tiledmap.getEntitiesInLayer('water')[water]
 							.addComponent("Collision, Water")
 							.collision();							
 					}

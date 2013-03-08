@@ -40,7 +40,7 @@ TiledMapBuilder.createView( startRow, startColumn, viewWidth, viewHeight, functi
 
 Get all entities from layer
 ```
-var entities = TiledMapBuilder.getLayer( layerName );
+var entities = TiledMapBuilder.getEntitiesInLayer( layerName );
 ```
 
 Get all layers
