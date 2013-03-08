@@ -173,89 +173,102 @@
 			});
 			
 			test("setPositionOrtogonal", function() {					
-				var entity = Crafty.e("2D, DOM");
+				var entity = {};
 				
 				//ortogonal 32x32
-				var ortogonal = Crafty.e("2D, DOM, TiledMapBuilder")
-				.setMapDataSource( getSourceOrhogonal() )
-				.createWorld();									
+				var ortogonal = Crafty.e("2D, DOM, TiledMapBuilder")						
+				var crate = {source:getSourceOrhogonal()}
 				
-				ortogonal.setPosition( {source:getSourceOrhogonal()}, entity, 0, 0);				
-				equal(entity._x, 0);
-				equal(entity._y, 0);
+				ortogonal.setPosition( crate, 0, 0, entity);				
+				equal(entity.x, 0);
+				equal(entity.y, 0);
 				
-				ortogonal.setPosition( {source:getSourceOrhogonal()}, entity, 1, 0);				
-				equal(entity._x, 32);
-				equal(entity._y, 0);
+				ortogonal.setPosition(crate, 1, 0, entity);				
+				equal(entity.x, 32);
+				equal(entity.y, 0);
 				
-				ortogonal.setPosition( {source:getSourceOrhogonal()}, entity, 2, 0);				
-				equal(entity._x, 64);
-				equal(entity._y, 0);
+				ortogonal.setPosition(crate, 2, 0, entity);				
+				equal(entity.x, 64);
+				equal(entity.y, 0);
 				
-				ortogonal.setPosition( {source:getSourceOrhogonal()}, entity, 0, 1);				
-				equal(entity._x, 0);
-				equal(entity._y, 32);
+				ortogonal.setPosition(crate, 0, 1, entity);				
+				equal(entity.x, 0);
+				equal(entity.y, 32);
 				
-				ortogonal.setPosition( {source:getSourceOrhogonal()}, entity, 1, 1);				
-				equal(entity._x, 32);
-				equal(entity._y, 32);		
+				ortogonal.setPosition(crate, 1, 1, entity);				
+				equal(entity.x, 32);
+				equal(entity.y, 32);		
 			});
 			
 			
 			test("setPositionIsometricDiamond", function() {					
+				var mockEntity = {};
 				var entity = Crafty.e("2D, DOM");
 			
 				//isometric diamond 64x32
 				var isometric = Crafty.e("2D, DOM, TiledMapBuilder")
 				.setMapDataSource( getSourceIsometric() )
 				.createWorld();	
+				var crate = {source:isometric._source}
 				
-				isometric.setPosition( {source:getSourceIsometric()}, entity, 0, 0);				
-				equal(entity._x, 0);
-				equal(entity._y, 0);
+				isometric.setPosition( crate, 0, 0, mockEntity);
+				isometric.getIsometric().place( mockEntity.x, mockEntity.y, 0, entity);				
+				equal(entity.x, 0);
+				equal(entity.y, 0);
 				
-				isometric.setPosition( {source:getSourceIsometric()}, entity, 1, 0);				
-				equal(entity._x, 32);
-				equal(entity._y, 16);
+				isometric.setPosition( crate, 1, 0, mockEntity);
+				isometric.getIsometric().place( mockEntity.x, mockEntity.y, 0, entity);
+				equal(entity.x, 32);
+				equal(entity.y, 16);
 				
-				isometric.setPosition( {source:getSourceIsometric()}, entity, 2, 0);				
-				equal(entity._x, 64);
-				equal(entity._y, 32);
+				isometric.setPosition( crate, 2, 0, mockEntity);	
+				isometric.getIsometric().place( mockEntity.x, mockEntity.y, 0, entity);
+				equal(entity.x, 64);
+				equal(entity.y, 32);
 				
-				isometric.setPosition( {source:getSourceIsometric()}, entity, 0, 1);				
-				equal(entity._x, -32);
-				equal(entity._y, 16);
+				isometric.setPosition( crate, 0, 1, mockEntity);	
+				isometric.getIsometric().place( mockEntity.x, mockEntity.y, 0, entity);
+				equal(entity.x, -32);
+				equal(entity.y, 16);
 				
-				isometric.setPosition( {source:getSourceIsometric()}, entity, 1, 1);				
-				equal(entity._x, 0);
-				equal(entity._y, 32);
+				isometric.setPosition( crate, 1, 1, mockEntity);
+				isometric.getIsometric().place( mockEntity.x, mockEntity.y, 0, entity);
+				equal(entity.x, 0);
+				equal(entity.y, 32);
 			});
 			
-			test("setPositionIsometricStaggered", function() {					
+			test("setPositionIsometricStaggered", function() {
+				var mockEntity = {};
 				var entity = Crafty.e("2D, DOM");
 			
 				//isometric staggered 40x20
 				var staggered = Crafty.e("2D, DOM, TiledMapBuilder")
 				.setMapDataSource( getSourceStaggered() )
 				.createWorld();	
+				var crate = {source:staggered._source}
 				
-				staggered.setPosition({source:getSourceStaggered()}, entity, 0, 0);				
+				staggered.setPosition( crate, 0, 0, mockEntity);
+				staggered.getIsometric().place( mockEntity.x, mockEntity.y, 0, entity);
 				equal(entity._x, 0);
 				equal(entity._y, 0);
 				
-				staggered.setPosition({source:getSourceStaggered()}, entity, 1, 0);				
+				staggered.setPosition( crate, 1, 0, mockEntity);				
+				staggered.getIsometric().place( mockEntity.x, mockEntity.y, 0, entity);
 				equal(entity._x, 40);
 				equal(entity._y, 0);
 				
-				staggered.setPosition({source:getSourceStaggered()}, entity, 2, 0);				
+				staggered.setPosition( crate, 2, 0, mockEntity);				
+				staggered.getIsometric().place( mockEntity.x, mockEntity.y, 0, entity);
 				equal(entity._x, 80);
 				equal(entity._y, 0);
 				
-				staggered.setPosition({source:getSourceStaggered()}, entity, 0, 1);				
+				staggered.setPosition( crate, 0, 1, mockEntity);				
+				staggered.getIsometric().place( mockEntity.x, mockEntity.y, 0, entity);
 				equal(entity._x, 20);
 				equal(entity._y, 10);
 				
-				staggered.setPosition({source:getSourceStaggered()}, entity, 1, 1);				
+				staggered.setPosition( crate, 1, 1, mockEntity);				
+				staggered.getIsometric().place( mockEntity.x, mockEntity.y, 0, entity);
 				equal(entity._x, 60);
 				equal(entity._y, 10);
 			});

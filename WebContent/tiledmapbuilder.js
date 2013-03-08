@@ -2,7 +2,7 @@
 * #TiledMapBuilder
 * @category Graphics
 * A Tiled map (http://mapeditor.org) importer for Crafty.js ( http://craftyjs.com)
-* It creates a tiled world on the basis of exported JSON file from Tiled Map Editor.
+* It creates a tiled world or view on the basis of exported JSON file from Tiled Map Editor.
 * It also provides methods to access to tiles, layers, tilesets. 
 *
 * @see http://www.mapeditor.org/ - Tiled Map Editor
@@ -11,11 +11,13 @@
 Crafty.c("TiledMapBuilder", {  	  				
 		
 	tileMapBuilderSetting: {
+		 USE_WEB_WORKERS		:false,
+		 PATH_TO_WORKER_SCRIPT	:'../../workers/createEntitiesWorker.js',
 		 ISOMETRIC_DIAMOND		:'isometric',
 		 ISOMETRIC_STAGGERED	:'staggered',
 		 ORTHOGONAL				:'orthogonal',
 		 RENDER_METHOD_CANVAS	:'Canvas',
-	     RENDER_METHOD_DOM		:'DOM'
+	     RENDER_METHOD_DOM		:'DOM',	    
 	 },
 	
 	_renderMethod: null,
@@ -78,8 +80,8 @@ Crafty.c("TiledMapBuilder", {
 	 * @return {Object} this   			
 	 */
 	createView: function( startRow, startColumn, viewWidth, viewHeight, callback ){
-		    	    	            	 
-		this._layers = this.createEntities( {startRow:startRow, startColumn:startColumn, viewWidth:viewWidth, viewHeight:viewHeight, source:this._source} );
+		
+		this._layers = this.createEntities( {startRow:startRow, startColumn:startColumn, viewWidth:viewWidth, viewHeight:viewHeight, renderMethod:this._renderMethod, source:this._source});
         	    	     	            
     	if(typeof callback != 'undefined'){
     		callback.call(this, this);
@@ -280,7 +282,7 @@ Crafty.c("TiledMapBuilder", {
 	/*
 	 * Create Crafty.entities
 	 * 
-	 * @param {Object} crate, contains:(startRow, startColumn, viewWidth, viewHeight, source)
+	 * @param {Object} crate, contains:(startRow, startColumn, viewWidth, viewHeight, renderMethod, source)
 	 * @return {Object} layers, contains entities		
 	 */
     createEntities: function( crate ){
@@ -296,7 +298,7 @@ Crafty.c("TiledMapBuilder", {
 	/*
 	 * Create Crafty.entities in layer
 	 *
-	 * @param {Object} crate, contains:(startRow, startColumn, viewWidth, viewHeight, source)
+	 * @param {Object} crate, contains:(startRow, startColumn, viewWidth, viewHeight, renderMethod, source)
 	 * @param {Object} layer		
 	 */
 	createEntitiesInLayer: function( crate, layer ){			
@@ -317,7 +319,7 @@ Crafty.c("TiledMapBuilder", {
 	/*
 	 * Create Crafty.entity
 	 * 
-	 * @param {Object} crate, contains:(startRow, startColumn, viewWidth, viewHeight, source)
+	 * @param {Object} crate, contains:(startRow, startColumn, viewWidth, viewHeight, renderMethod, source)
 	 * @param {Object} layer
 	 * @param {Integer} dataIndex	
 	 * @return {Object} Crafty.entity 
@@ -325,43 +327,64 @@ Crafty.c("TiledMapBuilder", {
 	createEntity:function( crate, layer, dataIndex){			
 		var column = dataIndex % layer.width;
 		var row = Math.floor((dataIndex / layer.width));								
-		var entity = Crafty.e("2D," + this.getRenderMethod() + ", Tile" + layer.data[dataIndex] + ", " + layer.name);
-		this.setPosition( crate, entity, column, row);
+		var entity = Crafty.e("2D," + crate.renderMethod + ", Tile" + layer.data[dataIndex] + ", " + layer.name);
+		
+		this.setPosition( crate, column, row, entity );
+		
+		if( this.isIsometric() ){
+			this.getIsometric().place( entity.x, entity.y, 0, entity);	
+		}
+		
 		return entity;
 	},
-			
+	
 	/*
 	 * Set position of entity
 	 * 
-	 * @param {Object} crate, contains:(startRow, startColumn, viewWidth, viewHeight, source)
-	 * @param {Object} Crafty.entity
+	 * @param {Object} crate, contains:(startRow, startColumn, viewWidth, viewHeight, renderMethod, source)
 	 * @param {Integer} column
-	 * @param {Integer} row
-	 
+	 * @param {Integer} row	 	
+	 * @param {Object} mockEntity 
 	 */
-	setPosition:function( crate, entity, column, row){		
+	setPosition:function( crate, column, row, mockEntity){
 		
-		switch(this.getOrientation()){
-			case this.tileMapBuilderSetting.ORTHOGONAL:
-				entity.x = column * crate.source.tilewidth;
-				entity.y = row * crate.source.tileheight;
+		switch( crate.source.orientation ){
+			
+			case "orthogonal":
+				mockEntity.x = column * crate.source.tilewidth;
+				mockEntity.y = row * crate.source.tileheight;
 				break;
-			case this.tileMapBuilderSetting.ISOMETRIC_DIAMOND:				
-				var x = (column - row) * (crate.source.tilewidth/2);
-				var y = (column + row) * (crate.source.tileheight/2);					
-				var positions = this.getIsometric().px2pos(x,y);
-				
-				//TODO - do custom px2pos for diamond map
-				this.getIsometric().place( -positions.x, -positions.y, 0, entity);					
+			
+			case "isometric":				
+				var left = (column - row) * (crate.source.tilewidth/2);
+				var top = (column + row) * (crate.source.tileheight/2);												
+				var position = this.px2pos(left, top, crate.source);
+				mockEntity.x = position.x;
+				mockEntity.y = position.y;				
 				break;
 				
-			case this.tileMapBuilderSetting.ISOMETRIC_STAGGERED:
-				this.getIsometric().place( column, row, 0, entity);				
+			case "staggered":
+				mockEntity.x = column;	
+				mockEntity.y = row;
 				break;
 											
 			default:
 				throw new Error("Orientation of map " + this.getOrientation() + "is not supported.");
-		}						
+		}
+	},	
+	
+	/*
+	 * Convert px to position in staggered map
+	 * 	
+	 * @param {Integer} left
+	 * @param {Integer} top 
+	 * @return {Object} position {x:number, y:number}
+	 */
+	px2pos:function( left, top, source){
+		return{
+			x:-Math.ceil(-left / source.tilewidth - (top%2) * 0.5),
+            y:top / source.tileheight * 2
+		};
 	},
 			
 	/*
