@@ -7,6 +7,7 @@
 		<script type="text/javascript" src="http://code.jquery.com/qunit/git/qunit.js"></script>							
 		<script src="../libs/crafty.js"></script>
 		<script src="source.js"></script>
+		<script src="../modules/create_mocks_module.js"></script>
 		<script src="../tiledmapbuilder.js"></script>
 		<script>
 		window.onload = function() {
@@ -51,18 +52,16 @@
 				equal( map.getLayerFromSource("wrong name") , null , "Null");
 			});
 			
-			test("getTileIndex", function() {	
-				var map = Crafty.e("2D, DOM, TiledMapBuilder")
-				map._source = getSourceOrhogonal()			
-				var groundLayer = map._source.layers[0];
+			test("getTileIndex", function() {						
+				var groundLayer = getSourceOrhogonal().layers[0];
 				
-				equal( map.getTileIndex(0, 0, groundLayer), 0);
-				equal( map.getTileIndex(0, 9, groundLayer), 9);
-				equal( map.getTileIndex(1, 0, groundLayer), 10);
-				equal( map.getTileIndex(1, 1, groundLayer), 11);
-				equal( map.getTileIndex(2, 3, groundLayer), 23);
+				equal( MockModule.getTileIndex(0, 0, groundLayer), 0);
+				equal( MockModule.getTileIndex(0, 9, groundLayer), 9);
+				equal( MockModule.getTileIndex(1, 0, groundLayer), 10);
+				equal( MockModule.getTileIndex(1, 1, groundLayer), 11);
+				equal( MockModule.getTileIndex(2, 3, groundLayer), 23);
 											
-				throws(function() { map.getTileIndex(a, b, groundLayer) }, "Illegal argument exception");																	
+				throws(function() { MockModule.getTileIndex(a, b, groundLayer) }, "Illegal argument exception");																	
 			});
 								
 			test("getEntitiesInLayer", function() {												
@@ -103,14 +102,12 @@
 				deepEqual( Crafty.e("2D, DOM, TiledMapBuilder").createSprite( getSourceOrhogonal().tilesets[0] ), result);				
 			});
 			
-			test("createEntity", function() {
-				var ent = Crafty.e("2D, DOM, TiledMapBuilder")
-				.setMapDataSource( getSourceOrhogonal() )
-				.createWorld();
+			test("createMockEntity", function() {							
+				MockModule.init( 0, 0, getSourceOrhogonal().width, getSourceOrhogonal().height, "DOM", getSourceOrhogonal());	
 				
-				ok( ent.createEntity( {source:getSourceOrhogonal()}, getSourceOrhogonal().layers[2], 12).has("Tile4")); 
-				equal( ent.createEntity( {source:getSourceOrhogonal()}, getSourceOrhogonal().layers[2], 12).x, 64, "X position");	
-				equal( ent.createEntity( {source:getSourceOrhogonal()}, getSourceOrhogonal().layers[2], 12).y, 32, "Y position");					
+				equal( MockModule.createMockEntity( getSourceOrhogonal().layers[2], 12).head, "2D,DOM,Tile4,obstacles"); 
+				equal( MockModule.createMockEntity( getSourceOrhogonal().layers[2], 12).x, 64, "X position");	
+				equal( MockModule.createMockEntity( getSourceOrhogonal().layers[2], 12).y, 32, "Y position");					
 			});
 			
 			test("getSource", function() {			
@@ -130,17 +127,17 @@
 				var ent = Crafty.e("2D, DOM, TiledMapBuilder")
 				.setMapDataSource( getSourceOrhogonal() )
 				.createWorld();				
-				equal( ent.getOrientation(), ent.tileMapBuilderSetting.ORTHOGONAL, "orthogonal");	
+				equal( ent.getOrientation(), MockModule.settings.ORTHOGONAL, "orthogonal");	
 							
 				ent = Crafty.e("2D, DOM, TiledMapBuilder")
 				.setMapDataSource( getSourceIsometric() )
 				.createWorld();				
-				equal( ent.getOrientation(), ent.tileMapBuilderSetting.ISOMETRIC_DIAMOND, "isometric");			
+				equal( ent.getOrientation(), MockModule.settings.ISOMETRIC_DIAMOND, "isometric");			
 				
 				ent = Crafty.e("2D, DOM, TiledMapBuilder")
 				.setMapDataSource( getSourceStaggered() )
 				.createWorld();			
-				equal( ent.getOrientation(), ent.tileMapBuilderSetting.ISOMETRIC_STAGGERED, "staggered");												
+				equal( ent.getOrientation(), MockModule.settings.ISOMETRIC_STAGGERED, "staggered");												
 			});
 			
 			test("isIsometric", function() {				
@@ -174,28 +171,26 @@
 			
 			test("setPositionOrtogonal", function() {					
 				var entity = {};
+								
+				MockModule.init( 0, 0, getSourceOrhogonal().width, getSourceOrhogonal().height, "DOM", getSourceOrhogonal());
 				
-				//ortogonal 32x32
-				var ortogonal = Crafty.e("2D, DOM, TiledMapBuilder")						
-				var crate = {source:getSourceOrhogonal()}
-				
-				ortogonal.setPosition( crate, 0, 0, entity);				
+				MockModule.setPosition( 0, 0, entity);				
 				equal(entity.x, 0);
 				equal(entity.y, 0);
 				
-				ortogonal.setPosition(crate, 1, 0, entity);				
+				MockModule.setPosition( 1, 0, entity);				
 				equal(entity.x, 32);
 				equal(entity.y, 0);
 				
-				ortogonal.setPosition(crate, 2, 0, entity);				
+				MockModule.setPosition( 2, 0, entity);				
 				equal(entity.x, 64);
 				equal(entity.y, 0);
 				
-				ortogonal.setPosition(crate, 0, 1, entity);				
+				MockModule.setPosition( 0, 1, entity);				
 				equal(entity.x, 0);
 				equal(entity.y, 32);
 				
-				ortogonal.setPosition(crate, 1, 1, entity);				
+				MockModule.setPosition( 1, 1, entity);				
 				equal(entity.x, 32);
 				equal(entity.y, 32);		
 			});
@@ -206,32 +201,31 @@
 				var entity = Crafty.e("2D, DOM");
 			
 				//isometric diamond 64x32
-				var isometric = Crafty.e("2D, DOM, TiledMapBuilder")
-				.setMapDataSource( getSourceIsometric() )
-				.createWorld();	
-				var crate = {source:isometric._source}
+				var isometric = Crafty.e("2D, DOM, TiledMapBuilder").setMapDataSource( getSourceIsometric() )
+														
+				MockModule.init( 0, 0, getSourceIsometric().width, getSourceIsometric().height, "DOM", getSourceIsometric());
 				
-				isometric.setPosition( crate, 0, 0, mockEntity);
+				MockModule.setPosition( 0, 0, mockEntity);
 				isometric.getIsometric().place( mockEntity.x, mockEntity.y, 0, entity);				
 				equal(entity.x, 0);
 				equal(entity.y, 0);
 				
-				isometric.setPosition( crate, 1, 0, mockEntity);
+				MockModule.setPosition(1, 0, mockEntity);
 				isometric.getIsometric().place( mockEntity.x, mockEntity.y, 0, entity);
 				equal(entity.x, 32);
 				equal(entity.y, 16);
 				
-				isometric.setPosition( crate, 2, 0, mockEntity);	
+				MockModule.setPosition( 2, 0, mockEntity);	
 				isometric.getIsometric().place( mockEntity.x, mockEntity.y, 0, entity);
 				equal(entity.x, 64);
 				equal(entity.y, 32);
 				
-				isometric.setPosition( crate, 0, 1, mockEntity);	
+				MockModule.setPosition( 0, 1, mockEntity);	
 				isometric.getIsometric().place( mockEntity.x, mockEntity.y, 0, entity);
 				equal(entity.x, -32);
 				equal(entity.y, 16);
 				
-				isometric.setPosition( crate, 1, 1, mockEntity);
+				MockModule.setPosition( 1, 1, mockEntity);
 				isometric.getIsometric().place( mockEntity.x, mockEntity.y, 0, entity);
 				equal(entity.x, 0);
 				equal(entity.y, 32);
@@ -242,53 +236,56 @@
 				var entity = Crafty.e("2D, DOM");
 			
 				//isometric staggered 40x20
-				var staggered = Crafty.e("2D, DOM, TiledMapBuilder")
-				.setMapDataSource( getSourceStaggered() )
-				.createWorld();	
-				var crate = {source:staggered._source}
+				var staggered = Crafty.e("2D, DOM, TiledMapBuilder").setMapDataSource( getSourceStaggered() )
 				
-				staggered.setPosition( crate, 0, 0, mockEntity);
+				MockModule.init( 0, 0, getSourceStaggered().width, getSourceStaggered().height, "DOM", getSourceStaggered());
+				
+				MockModule.setPosition( 0, 0, mockEntity);
 				staggered.getIsometric().place( mockEntity.x, mockEntity.y, 0, entity);
 				equal(entity._x, 0);
 				equal(entity._y, 0);
 				
-				staggered.setPosition( crate, 1, 0, mockEntity);				
+				MockModule.setPosition( 1, 0, mockEntity);				
 				staggered.getIsometric().place( mockEntity.x, mockEntity.y, 0, entity);
 				equal(entity._x, 40);
 				equal(entity._y, 0);
 				
-				staggered.setPosition( crate, 2, 0, mockEntity);				
+				MockModule.setPosition( 2, 0, mockEntity);				
 				staggered.getIsometric().place( mockEntity.x, mockEntity.y, 0, entity);
 				equal(entity._x, 80);
 				equal(entity._y, 0);
 				
-				staggered.setPosition( crate, 0, 1, mockEntity);				
+				MockModule.setPosition( 0, 1, mockEntity);				
 				staggered.getIsometric().place( mockEntity.x, mockEntity.y, 0, entity);
 				equal(entity._x, 20);
 				equal(entity._y, 10);
 				
-				staggered.setPosition( crate, 1, 1, mockEntity);				
+				MockModule.setPosition( 1, 1, mockEntity);				
 				staggered.getIsometric().place( mockEntity.x, mockEntity.y, 0, entity);
 				equal(entity._x, 60);
 				equal(entity._y, 10);
 			});
 													
-			test("makeSequence", function() {			
-				var ent = Crafty.e("2D, DOM, TiledMapBuilder");
-				deepEqual( ent.makeSequence(9,18), [9,10,11,12,13,14,15,16,17]); 
-				deepEqual( ent.makeSequence(0,0), []);
-				deepEqual( ent.makeSequence(1,100).length, 99);			 
+			test("makeSequence", function() {				
+				deepEqual( MockModule.makeSequence(9,18), [9,10,11,12,13,14,15,16,17]); 
+				deepEqual( MockModule.makeSequence(0,0), []);
+				deepEqual( MockModule.makeSequence(1,100).length, 99);			 
 			});	
 			
-			test("getIndexes", function() {			
-				var ent = Crafty.e("2D, DOM, TiledMapBuilder");
-				ent._source = getSourceOrhogonal();
-				var groundLayer = ent._source.layers[0];
+			test("getIndexes", function() {							
+				var groundLayer = getSourceOrhogonal().layers[0];
 				
-				deepEqual( ent.getIndexes({startRow:0, startColumn:0, viewWidth:10, viewHeight:2}, groundLayer), [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19]); 
-				equal( ent.getIndexes( {startRow:0, startColumn:0, viewWidth:10, viewHeight:10}, groundLayer).length, 100); 
-				deepEqual( ent.getIndexes( {startRow:5, startColumn:5, viewWidth:5, viewHeight:5}, groundLayer), [55,56,57,58,59,65,66,67,68,69,75,76,77,78,79,85,86,87,88,89,95,96,97,98,99]);
-				equal( ent.getIndexes( {startRow:8, startColumn:8, viewWidth:2, viewHeight:2}, groundLayer).length, 4); 
+				MockModule.init( 0, 0, 10, 2, "DOM", getSourceOrhogonal());							
+				deepEqual( MockModule.getIndexes(groundLayer), [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19]);
+				
+				MockModule.init( 0, 0, 10, 10, "DOM", getSourceOrhogonal());	
+				equal( MockModule.getIndexes(groundLayer).length, 100); 
+				
+				MockModule.init( 5, 5, 5, 5, "DOM", getSourceOrhogonal());	
+				deepEqual( MockModule.getIndexes( groundLayer), [55,56,57,58,59,65,66,67,68,69,75,76,77,78,79,85,86,87,88,89,95,96,97,98,99]);
+				
+				MockModule.init( 8, 8, 2, 2, "DOM", getSourceOrhogonal());	
+				equal( MockModule.getIndexes( groundLayer).length, 4); 
 			});	
 			
 //-- SOURCE DATA----------------------------------------------
