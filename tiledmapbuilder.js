@@ -12,10 +12,7 @@ Crafty.c("TiledMapBuilder", {
 		
 	tileMapBuilderSetting: {
 		 USE_WEB_WORKERS		:false,
-		 PATH_TO_WORKER_SCRIPT	:'../../workers/createEntitiesWorker.js',
-		 ISOMETRIC_DIAMOND		:'isometric',
-		 ISOMETRIC_STAGGERED	:'staggered',
-		 ORTHOGONAL				:'orthogonal',
+		 PATH_TO_WORKER_SCRIPT	:'../../modules/create_mocks_module.js',		
 		 RENDER_METHOD_CANVAS	:'Canvas',
 	     RENDER_METHOD_DOM		:'DOM',	    
 	 },
@@ -80,16 +77,21 @@ Crafty.c("TiledMapBuilder", {
 	 * @return {Object} this   			
 	 */
 	createView: function( startRow, startColumn, viewWidth, viewHeight, callback ){
+				
+		if( this.tileMapBuilderSetting.USE_WEB_WORKERS && typeof(Worker)!=="undefined"){			
+			//TODO					
+		}else{		
+			// Do not forget attach module: <script src="path/to/create_mocks_module.js"></script>
+			MockModule.init( startRow, startColumn, viewWidth, viewHeight, this._renderMethod, this._source );					
+			this._layers = this.createEntitiesFromMock( MockModule.createMockEntities());			
+	    	if(typeof callback != 'undefined'){
+	    		callback.call(this, this);
+	    	}			
+		}
 		
-		this._layers = this.createEntities( {startRow:startRow, startColumn:startColumn, viewWidth:viewWidth, viewHeight:viewHeight, renderMethod:this._renderMethod, source:this._source});
-        	    	     	            
-    	if(typeof callback != 'undefined'){
-    		callback.call(this, this);
-    	}
-    	
     	return this;    	
     },
-       	
+           
 	/**@
 	 * #TiledMapBuilder.getLayer
 	 * Contains all tiles as Crafty.entity in layer
@@ -127,7 +129,7 @@ Crafty.c("TiledMapBuilder", {
 			return null;
 		}
 		
-		return this._layers[layerName][this.getTileIndex( row, column, this.getLayerFromSource(layerName))];
+		return this._layers[layerName][MockModule.getTileIndex( row, column, this.getLayerFromSource(layerName))];
 	},
 		
 	/**@
@@ -188,8 +190,8 @@ Crafty.c("TiledMapBuilder", {
 	 * @return	boolean true or false		
 	 */
     isIsometric:function(){
-    	return this._source.orientation == this.tileMapBuilderSetting.ISOMETRIC_DIAMOND || 
-    		this._source.orientation == this.tileMapBuilderSetting.ISOMETRIC_STAGGERED;
+    	return this._source.orientation == MockModule.settings.ISOMETRIC_DIAMOND || 
+    		this._source.orientation == MockModule.settings.ISOMETRIC_STAGGERED;
     },
     
     /**@
@@ -230,7 +232,7 @@ Crafty.c("TiledMapBuilder", {
 	createTiles: function( source ){		
 		for(var idx = 0; idx < source.tilesets.length; idx++ ){
 			this.createSprite( source.tilesets[idx] );			
-		}		
+		};		
 	},
 	
 	/*
@@ -263,7 +265,7 @@ Crafty.c("TiledMapBuilder", {
 			for( var column = 0; column < numberOfColumns; column++ ){								
 				var name = "Tile" + ((parseInt(tileset.firstgid) + column) + (numberOfColumns * row ));								
 				tilesMap[name] = [column, row];
-			}			
+			};			
 		}	
 				
 		return tilesMap;
@@ -278,114 +280,35 @@ Crafty.c("TiledMapBuilder", {
     setIsometric:function( source ){
     	this._isometric = Crafty.isometric.size(source.tilewidth, source.tileheight);
     },
-	
+			
 	/*
-	 * Create Crafty.entities
-	 * 
-	 * @param {Object} crate, contains:(startRow, startColumn, viewWidth, viewHeight, renderMethod, source)
-	 * @return {Object} layers, contains entities		
+	 * Create Crafty.entities from mock
+	 *  
+	 * @param {Object} mockEntities, keys are layerName, contains MockObject or 0	
+	 * @return {Object} entities, {layer1Name:entities, layer2Name: entities, ...}
 	 */
-    createEntities: function( crate ){
+    createEntitiesFromMock:function( mockEntities ){ //TODO - refactor method
     	var layers = {};
-		for(var layer = 0; layer < crate.source.layers.length; layer++){
-			var entities = this.createEntitiesInLayer( crate, crate.source.layers[layer] );
-			layers[crate.source.layers[layer].name] = entities;			
-		}	
-		
-		return layers;
-	},
-	
-	/*
-	 * Create Crafty.entities in layer
-	 *
-	 * @param {Object} crate, contains:(startRow, startColumn, viewWidth, viewHeight, renderMethod, source)
-	 * @param {Object} layer		
-	 */
-	createEntitiesInLayer: function( crate, layer ){			
-		var indexes = this.getIndexes(crate, layer);
-		
-		var entities = [];
-		for(var i = 0; i < indexes.length; i++){	
-			
-			if( layer.data[indexes[i]] == 0 ){
-				entities.push(0);
-			}else{											
-				entities.push( this.createEntity( crate, layer, indexes[i] ) );
-			}						
-		}				
-		return entities;
-	},
-		
-	/*
-	 * Create Crafty.entity
-	 * 
-	 * @param {Object} crate, contains:(startRow, startColumn, viewWidth, viewHeight, renderMethod, source)
-	 * @param {Object} layer
-	 * @param {Integer} dataIndex	
-	 * @return {Object} Crafty.entity 
-	 */
-	createEntity:function( crate, layer, dataIndex){			
-		var column = dataIndex % layer.width;
-		var row = Math.floor((dataIndex / layer.width));								
-		var entity = Crafty.e("2D," + crate.renderMethod + ", Tile" + layer.data[dataIndex] + ", " + layer.name);
-		
-		this.setPosition( crate, column, row, entity );
-		
-		if( this.isIsometric() ){
-			this.getIsometric().place( entity.x, entity.y, 0, entity);	
-		}
-		
-		return entity;
-	},
-	
-	/*
-	 * Set position of entity
-	 * 
-	 * @param {Object} crate, contains:(startRow, startColumn, viewWidth, viewHeight, renderMethod, source)
-	 * @param {Integer} column
-	 * @param {Integer} row	 	
-	 * @param {Object} mockEntity 
-	 */
-	setPosition:function( crate, column, row, mockEntity){
-		
-		switch( crate.source.orientation ){
-			
-			case "orthogonal":
-				mockEntity.x = column * crate.source.tilewidth;
-				mockEntity.y = row * crate.source.tileheight;
-				break;
-			
-			case "isometric":				
-				var left = (column - row) * (crate.source.tilewidth/2);
-				var top = (column + row) * (crate.source.tileheight/2);												
-				var position = this.px2pos(left, top, crate.source);
-				mockEntity.x = position.x;
-				mockEntity.y = position.y;				
-				break;
-				
-			case "staggered":
-				mockEntity.x = column;	
-				mockEntity.y = row;
-				break;
-											
-			default:
-				throw new Error("Orientation of map " + this.getOrientation() + "is not supported.");
-		}
-	},	
-	
-	/*
-	 * Convert px to position in staggered map
-	 * 	
-	 * @param {Integer} left
-	 * @param {Integer} top 
-	 * @return {Object} position {x:number, y:number}
-	 */
-	px2pos:function( left, top, source){
-		return{
-			x:-Math.ceil(-left / source.tilewidth - (top%2) * 0.5),
-            y:top / source.tileheight * 2
-		};
-	},
+    	
+    	var isIsometric = this.isIsometric();
+    	var isometric = this.getIsometric();
+    	for (var layer in mockEntities) { 
+    		layers[layer] = [];
+    		 for(var idx = 0; idx < mockEntities[layer].length; idx++ ){
+    			 var mockEntity = mockEntities[layer][idx];
+    			 if( mockEntity == 0 ){
+    				 layers[layer].push(0);
+				}else{    					    				
+					var entity = Crafty.e( mockEntity.head ).attr({ x:mockEntity.x, y:mockEntity.y });
+	    			if( isIsometric ){
+	    				isometric.place( entity.x, entity.y, 0, entity);	
+	    			}    			     			
+	    			layers[layer].push( entity );
+				}    			     			     			     			     
+    		 }    		
+    	}    	    	   
+    	return layers;
+    },
 			
 	/*
 	 * Determine if layer with layerName exists
@@ -395,23 +318,6 @@ Crafty.c("TiledMapBuilder", {
 	 */
 	isLayer: function( layerName){
 		return this._layers[layerName] ? true : false;
-	},
-	
-	/*
-	 * Get index of tile from this._layers array
-	 * 	 
-	 * @param {Integer} row, start from 0 to N
-	 * @param {Integer} column, start from 0 to N
-	 * @param {Object} layer
-	 * @throws	Error OutOfRangeException - column or row is out of range 
-	 * @return {Integer} index
-	 */
-	getTileIndex:function( row, column, layer){
-		if( isNaN(row) || isNaN(column) ){
-			throw new Error("Illegal argument exception: " + row + ", " + column); 
-		}
-		
-		return ((layer.width) * row) + column;	
 	},
 	
 	/*
@@ -429,39 +335,5 @@ Crafty.c("TiledMapBuilder", {
 			}
 		}
 		return null;				
-	},
-	  
-    /*
-	* Return indexes from source data
-	* 	
-	* @param {Object} crate, contains:(startRow, startColumn, viewWidth, viewHeight, source)
-	* @param {Object} layer
-	* @return {Array} indexes - [0,1,10,11,12,15,20,21,22,23,24,25,26]	
-	*/
-    getIndexes:function( crate, layer ){    	
-    	var idxs = [];
-    	
-    	for(var row = crate.startRow ; row < (crate.startRow + crate.viewHeight); row++ ){
-    		var indexOfStartTile = this.getTileIndex(row, crate.startColumn, layer);     		
-    		idxs = idxs.concat(  this.makeSequence(indexOfStartTile, indexOfStartTile + crate.viewWidth));    		
-    	}    	   
-    	return idxs;
-    },
-    
-    /*
-	* Create sequence of numbers
-	* from is in
-	* to is out
-	* 
-	* @param {Integer} from
-	* @param {Integer} to
-	* @return {Array} indexes - [0,1,2,3,4,5,6,7,8,9,..]	
-	*/
-    makeSequence:function(from, to){       	    
-    	var numbers = [];       
-    	for(var idx = from; idx < to; idx++){
-    		numbers.push(idx);
-    	}    	      
-    	return numbers;	
-    },            
+	},	               
 });
