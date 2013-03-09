@@ -17,6 +17,13 @@ Trasfer Tiled Map editor objects to Crafty.polygon, Crafty.circle.
 
 ###Usage:
 
+Attach two script files. There are two files because builder uses [background thread](http://www.w3.org/TR/2009/WD-workers-20091029/) for lazy rendering. It is suitable for rendering views of large tiled map in the background.
+```
+<script src="modules/create_mocks_module.js"></script>
+<script src="tiledmapbuilder.js"></script>   
+```
+
+
 Set data source
 ```
 Crafty.e("2D, DOM, TiledMapBuilder").setMapDataSource( SOURCE_FROM_TILED_MAP_EDITOR );    
@@ -31,7 +38,7 @@ TiledMapBuilder.createWorld( function( map ){
 ```
 
 
-Create a view
+Create a view. For large tiled map and lazy loading.
 ```
 TiledMapBuilder.createView( startRow, startColumn, viewWidth, viewHeight, function( map ){
 	console.log("done");
