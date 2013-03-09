@@ -3,7 +3,7 @@
 * @category Graphics
 * A Tiled map (http://mapeditor.org) importer for Crafty.js ( http://craftyjs.com)
 * It creates a tiled world or view on the basis of exported JSON file from Tiled Map Editor.
-* It also provides methods to access to tiles, layers, tilesets. 
+* It also provides methods to access to tiles, layers, tilesets, rendering views of map, lazy loading,...
 *
 * @see http://www.mapeditor.org/ - Tiled Map Editor
 * @author Tomas Jurman (tomasjurman@gmail.com)
@@ -78,20 +78,18 @@ Crafty.c("TiledMapBuilder", {
 	 */
 	createView: function( startRow, startColumn, viewWidth, viewHeight, callback ){
 				
-		if( this.tileMapBuilderSetting.USE_WEB_WORKERS && typeof(Worker)!=="undefined"){			
-			//TODO					
+		if( this.tileMapBuilderSetting.USE_WEB_WORKERS && typeof(Worker)!=="undefined"){								
+			this.doInBackground({startRow:startRow, startColumn:startColumn, viewWidth:viewWidth, viewHeight:viewHeight, renderMethod:this._renderMethod, source:this._source}, callback );
+			
 		}else{		
 			// Do not forget attach module: <script src="path/to/create_mocks_module.js"></script>
-			MockModule.init( startRow, startColumn, viewWidth, viewHeight, this._renderMethod, this._source );					
-			this._layers = this.createEntitiesFromMock( MockModule.createMockEntities());			
-	    	if(typeof callback != 'undefined'){
-	    		callback.call(this, this);
-	    	}			
+			MockModule.init( startRow, startColumn, viewWidth, viewHeight, this._renderMethod, this._source );										
+			this.saveResult( MockModule.createMockEntities(), callback );			
 		}
 		
     	return this;    	
     },
-           
+    
 	/**@
 	 * #TiledMapBuilder.getLayer
 	 * Contains all tiles as Crafty.entity in layer
@@ -335,5 +333,33 @@ Crafty.c("TiledMapBuilder", {
 			}
 		}
 		return null;				
-	},	               
+	},	
+	
+	  /*
+     * Do task in background thread
+     * 
+     * @param {Object} data, {startRow:startRow, startColumn:startColumn, viewWidth:viewWidth, viewHeight:viewHeight, renderMethod:renderMethod, source:source}
+     * @param {Function} callback - callback function call when world is done 
+     */
+    doInBackground:function( data, callback){
+    	var self = this;
+		var worker = new Worker(this.tileMapBuilderSetting.PATH_TO_WORKER_SCRIPT);				
+		worker.postMessage(data);
+		worker.onmessage = function (e) {					
+			self.saveResult( e.data, callback );							
+		};
+    },
+    
+    /*
+     * Save entities to private field
+     * 
+     * @param {Object} mockEntities
+     * @param {Function} callback - callback function call when world is done	
+     */
+    saveResult: function( mockEntities, callback){
+    	this._layers = this.createEntitiesFromMock( mockEntities );			
+		if(typeof callback != 'undefined'){
+    		callback.call(this, this);
+    	}
+    },
 });

@@ -1,6 +1,6 @@
-onmessage = function(event) {  
-  var result = 'testa';
-  postMessage(result);   
+onmessage = function(e) {
+	MockModule.init(e.data.startRow, e.data.startColumn, e.data.viewWidth, e.data.viewHeight, e.data.renderMethod, e.data.source);		
+	postMessage(MockModule.createMockEntities());   
 };
 
 /**

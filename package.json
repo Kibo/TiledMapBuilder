@@ -27,6 +27,7 @@
     "jsfiddle" : "disable", 
     "homepage": "https://github.com/Kibo/TiledMapBuilder",
     "files": [
-    	"WebContent/tiledmapbuilder.js"
+    	"WebContent/tiledmapbuilder.js",
+    	"WebContent/modules/create_mocks_module.js"
     ]
 }

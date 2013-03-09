@@ -1,4 +1,4 @@
-# TiledMapBuilder v0.9.0
+# TiledMapBuilder v0.9.5
 
 A Tiled map (http://mapeditor.org) importer for Crafty.js (http://craftyjs.com)
 
@@ -38,7 +38,7 @@ TiledMapBuilder.createWorld( function( map ){
 ```
 
 
-Create a view. For large tiled map and lazy loading.
+Create a view. For large tiled map or lazy loading.
 ```
 TiledMapBuilder.createView( startRow, startColumn, viewWidth, viewHeight, function( map ){
 	console.log("done");
