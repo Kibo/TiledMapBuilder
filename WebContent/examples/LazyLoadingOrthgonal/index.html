@@ -25,10 +25,10 @@
   			var WORLD_HEIGHT = 1600; 
   			var VIEWPORT_WIDTH = 600;
   			var VIEWPORT_HEIGHT = 600;  	
-  			var START_ROW = 20;
-  			var START_COLUMN = 20;
-  			var LAZY_TILE_WIDTH = 8; //tiles
-  			var LAZY_TILE_HEIGHT = 8;//tiles  		
+  			var START_ROW = 0;
+  			var START_COLUMN = 0;
+  			var LAZY_TILE_WIDTH = 10; //tiles
+  			var LAZY_TILE_HEIGHT = 10;//tiles  		
   			var TILE_WIDTH = 32;
   			
   			Crafty.init(WORLD_WIDTH, WORLD_HEIGHT); 
@@ -59,9 +59,31 @@
   			  			  		
 			Crafty.scene("Main", function () {
 				
+				var LAZY_GRID = null;
+				
 				Crafty.e("2D, DOM, TiledMapBuilder").setMapDataSource( SOURCE_FROM_TILED_MAP_EDITOR )
-				.createView( START_ROW-8, START_COLUMN-8, LAZY_TILE_WIDTH*2, LAZY_TILE_HEIGHT*2, function( tiledmap ){
-					console.log("done");									
+				.createView( START_ROW, START_COLUMN, LAZY_TILE_WIDTH, LAZY_TILE_HEIGHT, function( tiledmap ){
+					console.log("done");
+					
+					
+					var rows = [];
+					for( var row=0, rowLength=Math.floor(tiledmap.getSource().height/ LAZY_TILE_HEIGHT); row < rowLength ; row++ ){
+						
+						var columns = []
+						for(var column = 0, colLength = Math.floor(tiledmap.getSource().width/ LAZY_TILE_WIDTH); column < colLength ; column++ ){
+							
+							columns[column] = {isLoad:false, poly: new Crafty.polygon(
+									[column * LAZY_TILE_WIDTH * tiledmap.getSource().tilewidth, row * LAZY_TILE_WIDTH * tiledmap.getSource().tileheight],
+									[(column * LAZY_TILE_WIDTH + LAZY_TILE_WIDTH) * tiledmap.getSource().tilewidth , row * LAZY_TILE_WIDTH * tiledmap.getSource().tileheight],
+									[(column * LAZY_TILE_WIDTH + LAZY_TILE_WIDTH) * tiledmap.getSource().tilewidth, (row * LAZY_TILE_WIDTH + LAZY_TILE_HEIGHT) * tiledmap.getSource().tileheight],
+									[column * LAZY_TILE_WIDTH * tiledmap.getSource().tilewidth, (row * LAZY_TILE_WIDTH + LAZY_TILE_HEIGHT) * tiledmap.getSource().tileheight])}
+							
+							rows[row] = columns;			
+						}						
+					}
+					
+					console.log( rows);
+					
 				})
 																												
 				Crafty.e("2D, DOM, Fourway, SpriteAnimation, Ogre, Collision")

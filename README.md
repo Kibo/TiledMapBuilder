@@ -112,7 +112,16 @@ var iso = TiledMapBuilder.getIsometric();
 - [Demo staggered: River](http://kibo.github.com/TiledMapBuilder/examples/IsometricStaggered/index.html)
 
 
-**Contact me**
+###Reflections of large tiled map
+- Use views instead of generating the whole world.
+- Use background processing ( USE_WEB_WORKERS:true ) for partial work in the background.
+- Use a small number of layers: it must pass through each layer. 
+- Divided your map to ground map and obstackes map. For ground map use views and lazy loading. Obstacles map load as all world map in boot of game and set collision.
+- Use big tile: Large tiles equals fewer entities. Every tile is Crafty entity.
+- [Canvas or DOM](http://gamedev.stackexchange.com/questions/23023/to-canvas-or-not-to-canvas-when-building-browser-based-games) (on march 2013).
+
+
+###Contact me
 
 I will be grateful for constructive comments.
 

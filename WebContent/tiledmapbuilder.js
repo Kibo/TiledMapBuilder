@@ -20,6 +20,7 @@ Crafty.c("TiledMapBuilder", {
 	_renderMethod: null,
 	_isometric:null,
 	_layers: null,	
+	_callback:null,
     init: function() {    			    	  			    
     	this._renderMethod = this.has(this.tileMapBuilderSetting.RENDER_METHOD_CANVAS) ? 
     			this.tileMapBuilderSetting.RENDER_METHOD_CANVAS : 
@@ -76,18 +77,31 @@ Crafty.c("TiledMapBuilder", {
 	 * @param {Function} callback - callback function call when world is done	
 	 * @return {Object} this   			
 	 */
-	createView: function( startRow, startColumn, viewWidth, viewHeight, callback ){
+	createView: function( startRow, startColumn, viewWidth, viewHeight, callback ){			
+		this._callback = callback;
 				
 		if( this.tileMapBuilderSetting.USE_WEB_WORKERS && typeof(Worker)!=="undefined"){								
-			this.doInBackground({startRow:startRow, startColumn:startColumn, viewWidth:viewWidth, viewHeight:viewHeight, renderMethod:this._renderMethod, source:this._source}, callback );
+			this.doInBackground({startRow:startRow, startColumn:startColumn, viewWidth:viewWidth, viewHeight:viewHeight, renderMethod:this._renderMethod, source:this._source});
 			
 		}else{		
 			// Do not forget attach module: <script src="path/to/create_mocks_module.js"></script>
-			MockModule.init( startRow, startColumn, viewWidth, viewHeight, this._renderMethod, this._source );										
-			this.saveResult( MockModule.createMockEntities(), callback );			
+			MockModule.init( startRow, startColumn, viewWidth, viewHeight, this._renderMethod, this._source );
+			this._layers = this.createEntitiesFromMock( MockModule.createMockEntities() );	
+			this.fireCallback();			
 		}
 		
     	return this;    	
+    },
+    
+    /**@
+	 * #TiledMapBuilder.lazyLoadingForEntity
+	 * Is rendering a lazy tiled views based on the player entity.
+	 * 	
+	 * @param {Object} entity, Crafty.e	
+	 * @return {Object} this   			
+	 */
+    lazyLoadingForEntity: function( entity ){
+    	new Error("NotSupportedException");  	
     },
     
 	/**@
@@ -341,25 +355,27 @@ Crafty.c("TiledMapBuilder", {
      * @param {Object} data, {startRow:startRow, startColumn:startColumn, viewWidth:viewWidth, viewHeight:viewHeight, renderMethod:renderMethod, source:source}
      * @param {Function} callback - callback function call when world is done 
      */
-    doInBackground:function( data, callback){
+    doInBackground:function( data ){
     	var self = this;
 		var worker = new Worker(this.tileMapBuilderSetting.PATH_TO_WORKER_SCRIPT);				
 		worker.postMessage(data);
-		worker.onmessage = function (e) {					
-			self.saveResult( e.data, callback );							
+		worker.onmessage = function (e) {
+			self._layers = self.createEntitiesFromMock( e.data );	
+			self.fireCallback();							
+		};
+		
+		worker.onerror = function(error) {		      
+			throw error;
 		};
     },
     
     /*
-     * Save entities to private field
-     * 
-     * @param {Object} mockEntities
-     * @param {Function} callback - callback function call when world is done	
+     * It fires defined callback function   
      */
-    saveResult: function( mockEntities, callback){
-    	this._layers = this.createEntitiesFromMock( mockEntities );			
-		if(typeof callback != 'undefined'){
-    		callback.call(this, this);
+    fireCallback: function(){    		
+		if(typeof this._callback != 'undefined'){
+    		this._callback.call(this, this);
     	}
     },
 });
+
