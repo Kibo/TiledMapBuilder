@@ -13,7 +13,8 @@ A Tiled map (http://mapeditor.org) importer for Crafty.js (http://craftyjs.com)
 - [tested code](https://github.com/Kibo/TiledMapBuilder/blob/master/WebContent/test/tests.html)
 
 ###Todo:
-Trasfer Tiled Map editor objects to Crafty.polygon, Crafty.circle.
+- Lazy loading for player entity.
+- Trasfer Tiled Map editor objects to Crafty.polygon, Crafty.circle.
 
 ###Usage:
 
