@@ -122,6 +122,9 @@ var iso = TiledMapBuilder.getIsometric();
 - [Canvas or DOM](http://gamedev.stackexchange.com/questions/23023/to-canvas-or-not-to-canvas-when-building-browser-based-games) (on march 2013).
 
 
+###It may interest you to know
+- [Dialogues module](https://github.com/Kibo/CraftyDialogues) for [Crafty](http://craftyjs.com/) game engine
+
 ###Contact me
 
 I will be grateful for constructive comments.
