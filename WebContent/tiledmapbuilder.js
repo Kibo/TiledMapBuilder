@@ -336,26 +336,26 @@ Crafty.c("TiledMapBuilder", {
     						 radius,
     						 radius,
     						 radius);
-    						 entity.collision(circle);
-    					 } else if (mockEntity.polygon) {
-    						 entity.addComponent('Collision');
-    						 var points = mockEntity.polygon.map(function (point) {
-    							 return [point.x, point.y];
-    						 });
-    						 entity.collision.apply(entity, points);
-    					 } else if (mockEntity.gid) {
-    						 entity.addComponent('Tile' + mockEntity.gid);
-    						 entity.addComponent(this._renderMethod);
-    						 entity.y = entity.y - entity.h;
-    						 entity.visible = true;
-    					 } else if (mockEntity.polyline) {
-    						 console.log("Lines aren't currently support well by Crafty. " +
-    						 "Please consider a different object type.");
-    					 }
-    					 this.attach(entity);
-    					 layers[layer].push(entity);
+    					 entity.collision(circle);
+    				 } else if (mockEntity.polygon) {
+    					 entity.addComponent('Collision');
+    					 var points = mockEntity.polygon.map(function (point) {
+    						 return [point.x, point.y];
+    					 });
+    					 entity.collision.apply(entity, points);
+    				 } else if (mockEntity.gid) {
+    					 entity.addComponent('Tile' + mockEntity.gid);
+    					 entity.addComponent(this._renderMethod);
+    					 entity.y = entity.y - entity.h;
+    					 entity.visible = true;
+    				 } else if (mockEntity.polyline) {
+    					 console.log("Lines aren't currently support well by Crafty. " +
+    					 "Please consider a different object type.");
     				 }
+    				 this.attach(entity);
+    				 layers[layer].push(entity);
     			 }
+    			
     		 }    		
     	}    	    	   
     	return layers;

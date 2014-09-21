@@ -105,7 +105,8 @@
 			test("createMockEntity", function() {							
 				MockModule.init( 0, 0, getSourceOrhogonal().width, getSourceOrhogonal().height, "DOM", getSourceOrhogonal());	
 				
-				equal( MockModule.createMockEntity( getSourceOrhogonal().layers[2], 12).head, "2D,DOM,Tile4,obstacles"); 
+				equal( MockModule.createMockEntity(
+						getSourceOrhogonal().layers[2], 12).head, "2D,DOM,Tile,Tile4,obstacles"); 
 				equal( MockModule.createMockEntity( getSourceOrhogonal().layers[2], 12).x, 64, "X position");	
 				equal( MockModule.createMockEntity( getSourceOrhogonal().layers[2], 12).y, 32, "Y position");					
 			});
