@@ -11,25 +11,25 @@
 Crafty.c("TiledMapBuilder", {
 
 	tileMapBuilderSetting: {
-		 USE_WEB_WORKERS		:false,
-		 PATH_TO_WORKER_SCRIPT	:'create_mocks_module.js',
-		 RENDER_METHOD_CANVAS :'Canvas',
-			 RENDER_METHOD_DOM		:'DOM',
-	 },
+		USE_WEB_WORKERS: false,
+		PATH_TO_WORKER_SCRIPT: '../../modules/create_mocks_module.js',
+		RENDER_METHOD_CANVAS: 'Canvas',
+		ENDER_METHOD_DOM: 'DOM',
+	},
 
 	_renderMethod: null,
 	_isometric:null,
 	_layers: null,
 	_callback:null,
-		init: function() {
-			this._renderMethod = this.has(this.tileMapBuilderSetting.RENDER_METHOD_CANVAS) ?
-					this.tileMapBuilderSetting.RENDER_METHOD_CANVAS :
-					this.tileMapBuilderSetting.RENDER_METHOD_DOM;
+	init: function() {
+		this._renderMethod = this.has(this.tileMapBuilderSetting.RENDER_METHOD_CANVAS) ?
+				this.tileMapBuilderSetting.RENDER_METHOD_CANVAS :
+				this.tileMapBuilderSetting.RENDER_METHOD_DOM;
 
-			return this;
-		},
+		return this;
+	},
 
-		/**@
+	/**@
 	 * #TiledMapBuilder.setMapDataSource
 	 * Set a data source for tiled map.
 	 *
@@ -39,31 +39,31 @@ Crafty.c("TiledMapBuilder", {
 	 *
 	 * @see http://www.mapeditor.org/ - Tiled Map Editor, export to JSON
 	 */
-		setMapDataSource:function( source ){
-			if(!this.isValid(source)){
-				throw new Error("Source is not valid.");
-			}
+	setMapDataSource:function( source ){
+		if(!this.isValid(source)){
+			throw new Error("Source is not valid.");
+		}
 
-			this._source = source;
+		this._source = source;
 
-			if( this.isIsometric() ){
-				this.setIsometric( source );
-			}
+		if( this.isIsometric() ){
+			this.setIsometric( source );
+		}
 
-			this.createTiles( source );
+		this.createTiles( source );
 
-			return this;
-		},
+		return this;
+	},
 
-		/**@
+	/**@
 	 * #TiledMapBuilder.createWorld
 	 * Renders a tiled world based on the source file.
 	 *
 	 * @param {Function} callback - callback function call when world is done
 	 * @return {Object} this
 	 */
-		createWorld: function( callback ) {
-			return this.createView( 0, 0, this._source.width, this._source.height, callback );
+	createWorld: function( callback ) {
+		return this.createView( 0, 0, this._source.width, this._source.height, callback );
 	},
 
 	/**@
@@ -90,19 +90,19 @@ Crafty.c("TiledMapBuilder", {
 			this.fireCallback();
 		}
 
-			return this;
-		},
+		return this;
+	},
 
-		/**@
+	/**@
 	 * #TiledMapBuilder.lazyLoadingForEntity
 	 * Is rendering a lazy tiled views based on the player entity.
 	 *
 	 * @param {Object} entity, Crafty.e
 	 * @return {Object} this
 	 */
-		lazyLoadingForEntity: function( entity ){
-			new Error("NotSupportedException");
-		},
+	lazyLoadingForEntity: function( entity ){
+		new Error("NotSupportedException");
+	},
 
 	/**@
 	 * #TiledMapBuilder.getLayer
@@ -152,11 +152,11 @@ Crafty.c("TiledMapBuilder", {
 	 *
 	 * @return {Object} layers
 	 */
-		getLayers: function(){
-			return this._layers;
-		},
+	getLayers: function(){
+		return this._layers;
+	},
 
-	 /**@
+	/**@
 	 * #TiledMapBuilder.getRenderMethod
 	 *
 	 * @example
@@ -171,50 +171,50 @@ Crafty.c("TiledMapBuilder", {
 	 *
 	 * @return	String renderMethod - DOM or Canvas
 	 */
-		getRenderMethod: function(){
-			return this._renderMethod;
-		},
+	getRenderMethod: function(){
+		return this._renderMethod;
+	},
 
-		/**@
+	/**@
 	 * #TiledMapBuilder.getSource
 	 *
 	 * @return	Object source
 	 * @see TiledMap.load
 	 */
-		getSource: function(){
-			return this._source;
-		},
+	getSource: function(){
+		return this._source;
+	},
 
-		/**@
+	/**@
 	 * #TiledMapBuilder.getIsometric
 	 *
 	 * @return Object Crafty.isometric or null if map is not isometric
 	 *
 	 * @see http://craftyjs.com/api/Crafty-isometric.html
 	 */
-		getIsometric:function(){
-			return this._isometric;
-		},
+	getIsometric:function(){
+		return this._isometric;
+	},
 
-		/**@
+	/**@
 	 * #TiledMapBuilder.isIsometric
 	 *
 	 * @return	boolean true or false
 	 */
-		isIsometric:function(){
-			return this._source.orientation == MockModule.settings.ISOMETRIC_DIAMOND ||
-				this._source.orientation == MockModule.settings.ISOMETRIC_STAGGERED;
-		},
+	isIsometric:function(){
+		return this._source.orientation == MockModule.settings.ISOMETRIC_DIAMOND ||
+		this._source.orientation == MockModule.settings.ISOMETRIC_STAGGERED;
+	},
 
-		/**@
+	/**@
 	 * #TiledMapBuilder.getOrientation
 	 * Map orientation.
 	 *
 	 * @return {String} (orthogonal || isometric || staggered)
 	 */
-		getOrientation:function(){
-			return this._source.orientation;
-		},
+	getOrientation:function(){
+		return this._source.orientation;
+	},
 
 	/*
 	 * Validate source object
@@ -226,9 +226,9 @@ Crafty.c("TiledMapBuilder", {
 		var isValid = true;
 
 		if(!source ||											 // is not undefined
-			 !(source.width && source.height) ||					// has width and height property
-			 !(source.layers && source.layers.length >=1) ||		// has no empty layer property
-			 !(source.tilesets && source.tilesets.length >=1)){ // has no empty tilesets property
+		!(source.width && source.height) ||					// has width and height property
+		!(source.layers && source.layers.length >=1) ||		// has no empty layer property
+		!(source.tilesets && source.tilesets.length >=1)){ // has no empty tilesets property
 			isValid = false;
 		}
 
@@ -269,7 +269,7 @@ Crafty.c("TiledMapBuilder", {
 	arrangeTiles:function(tileset){
 
 		var numberOfColumns = Math.round(tileset.imagewidth / (tileset.tilewidth+tileset.margin));
-			var numberOfRows = Math.round(tileset.imageheight / (tileset.tileheight+tileset.margin));
+		var numberOfRows = Math.round(tileset.imageheight / (tileset.tileheight+tileset.margin));
 
 		var tilesMap = {};
 		for(var row = 0; row < numberOfRows; row++ ){
@@ -283,15 +283,15 @@ Crafty.c("TiledMapBuilder", {
 		return tilesMap;
 	},
 
-	 /*
+	/*
 	 * #TiledMapBuilder.setIsometric
 	 * Create Crafty.isometric object and set it as private field.
 	 *
 	 * @param {Object} source - object from JSON file exported by Tiled Map Editor
 	 */
-		setIsometric:function( source ){
-			this._isometric = Crafty.isometric.size(source.tilewidth, source.tileheight);
-		},
+	setIsometric:function( source ){
+		this._isometric = Crafty.isometric.size(source.tilewidth, source.tileheight);
+	},
 
 	/*
 	 * Create Crafty.entities from mock
@@ -299,77 +299,77 @@ Crafty.c("TiledMapBuilder", {
 	 * @param {Object} mockEntities, keys are layerName, contains MockObject or 0
 	 * @return {Object} entities, {layer1Name:entities, layer2Name: entities, ...}
 	 */
-		createEntitiesFromMock:function( mockEntities ){ //TODO - refactor method
-			var layers = {};
+	createEntitiesFromMock:function( mockEntities ){ //TODO - refactor method
+	var layers = {};
 
-			var isIsometric = this.isIsometric();
-			var isometric = this.getIsometric();
-			for (var layer in mockEntities) {
-				layers[layer] = [];
-				for(var idx = 0; idx < mockEntities[layer].length; idx++ ){
-					var mockEntity = mockEntities[layer][idx];
-					if( mockEntity == 0 ){
-						layers[layer].push(0);
-					} else if (mockEntity.type == 'Empty') {
-						var entity = Crafty.e( mockEntity.head ).attr({
-							x: mockEntity.x,
-							y: mockEntity.y,
-							properties: mockEntity.properties,
-						}).setName('TileEmpty_' + mockEntity.x + "_" + mockEntity.y);
-						if( isIsometric ){
-							isometric.place( entity.x, entity.y, 0, entity);
-						}
-						this.attach(entity);
-						layers[layer].push( entity );
-					} else if (mockEntity.type == 'Tile') {
-						var entity = Crafty.e( mockEntity.head ).attr({
-							x: mockEntity.x,
-							y: mockEntity.y,
-							properties: mockEntity.properties,
-						}).setName('Tile_' + mockEntity.x + "_" + mockEntity.y);
-						if( isIsometric ){
-							isometric.place( entity.x, entity.y, 0, entity);
-						}
-						this.attach(entity);
-						layers[layer].push( entity );
-					} else if (mockEntity.type == 'Object') {
-						var entity = Crafty.e( mockEntity.head ).attr({
-							x: mockEntity.x,
-							y: mockEntity.y,
-							w: mockEntity.width,
-							h: mockEntity.height,
-							properties: mockEntity.properties,
-						}).setName('MapObject_' + mockEntity.x + "_" + mockEntity.y);
-						if (mockEntity.ellipse) {
-							entity.addComponent('Collision');
-							var radius = Math.min(mockEntity.width, mockEntity.height) / 2;
-							var circle = new Crafty.circle(
-								radius,
-								radius,
-								radius);
-							entity.collision(circle);
-						} else if (mockEntity.polygon) {
-							entity.addComponent('Collision');
-							var points = mockEntity.polygon.map(function (point) {
-								return [point.x, point.y];
-							});
-							entity.collision.apply(entity, points);
-						} else if (mockEntity.gid) {
-							entity.addComponent('Tile' + mockEntity.gid);
-							entity.addComponent(this._renderMethod);
-							entity.y = entity.y - entity.h;
-							entity.visible = true;
-						} else if (mockEntity.polyline) {
-							console.log("Lines aren't currently support well by Crafty. " +
-													"Please consider a different object type.");
-						}
-						this.attach(entity);
-						layers[layer].push(entity);
+	var isIsometric = this.isIsometric();
+	var isometric = this.getIsometric();
+	for (var layer in mockEntities) {
+		layers[layer] = [];
+		for(var idx = 0; idx < mockEntities[layer].length; idx++ ){
+			var mockEntity = mockEntities[layer][idx];
+			if( mockEntity == 0 ){
+				layers[layer].push(0);
+			} else if (mockEntity.type == 'Empty') {
+				var entity = Crafty.e( mockEntity.head ).attr({
+					x: mockEntity.x,
+					y: mockEntity.y,
+					properties: mockEntity.properties,
+				}).setName('TileEmpty_' + mockEntity.x + "_" + mockEntity.y);
+				if( isIsometric ){
+					isometric.place( entity.x, entity.y, 0, entity);
+				}
+				this.attach(entity);
+				layers[layer].push( entity );
+			} else if (mockEntity.type == 'Tile') {
+				var entity = Crafty.e( mockEntity.head ).attr({
+					x: mockEntity.x,
+					y: mockEntity.y,
+					properties: mockEntity.properties,
+				}).setName('Tile_' + mockEntity.x + "_" + mockEntity.y);
+				if( isIsometric ){
+					isometric.place( entity.x, entity.y, 0, entity);
+				}
+				this.attach(entity);
+				layers[layer].push( entity );
+			} else if (mockEntity.type == 'Object') {
+				var entity = Crafty.e( mockEntity.head ).attr({
+					x: mockEntity.x,
+					y: mockEntity.y,
+					w: mockEntity.width,
+					h: mockEntity.height,
+					properties: mockEntity.properties,
+				}).setName('MapObject_' + mockEntity.x + "_" + mockEntity.y);
+				if (mockEntity.ellipse) {
+					entity.addComponent('Collision');
+					var radius = Math.min(mockEntity.width, mockEntity.height) / 2;
+					var circle = new Crafty.circle(
+						radius,
+						radius,
+						radius);
+						entity.collision(circle);
+					} else if (mockEntity.polygon) {
+						entity.addComponent('Collision');
+						var points = mockEntity.polygon.map(function (point) {
+							return [point.x, point.y];
+						});
+						entity.collision.apply(entity, points);
+					} else if (mockEntity.gid) {
+						entity.addComponent('Tile' + mockEntity.gid);
+						entity.addComponent(this._renderMethod);
+						entity.y = entity.y - entity.h;
+						entity.visible = true;
+					} else if (mockEntity.polyline) {
+						console.log("Lines aren't currently support well by Crafty. " +
+						"Please consider a different object type.");
 					}
+					this.attach(entity);
+					layers[layer].push(entity);
 				}
 			}
-			return layers;
-		},
+		}
+		return layers;
+	},
 
 	/*
 	 * Determine if layer with layerName exists
@@ -398,14 +398,14 @@ Crafty.c("TiledMapBuilder", {
 		return null;
 	},
 
-		/*
-		 * Do task in background thread
-		 *
-		 * @param {Object} data, {startRow:startRow, startColumn:startColumn, viewWidth:viewWidth, viewHeight:viewHeight, renderMethod:renderMethod, source:source}
-		 * @param {Function} callback - callback function call when world is done
-		 */
-		doInBackground:function( data ){
-			var self = this;
+	/*
+	 * Do task in background thread
+	 *
+	 * @param {Object} data, {startRow:startRow, startColumn:startColumn, viewWidth:viewWidth, viewHeight:viewHeight, renderMethod:renderMethod, source:source}
+	 * @param {Function} callback - callback function call when world is done
+	 */
+	doInBackground:function( data ){
+		var self = this;
 		var worker = new Worker(this.tileMapBuilderSetting.PATH_TO_WORKER_SCRIPT);
 		worker.postMessage(data);
 		worker.onmessage = function (e) {
@@ -416,15 +416,15 @@ Crafty.c("TiledMapBuilder", {
 		worker.onerror = function(error) {
 			throw error;
 		};
-		},
+	},
 
-		/*
-		 * It fires defined callback function
-		 */
-		fireCallback: function(){
+	/*
+	 * It fires defined callback function
+	 */
+	fireCallback: function(){
 		if(typeof this._callback != 'undefined'){
-				this._callback.call(this, this);
-			}
-		},
+			this._callback.call(this, this);
+		}
+	},
 });
 

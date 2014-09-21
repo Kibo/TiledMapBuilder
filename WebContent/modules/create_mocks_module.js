@@ -19,9 +19,9 @@ MockModule = {
 	_source:null,
 
 	settings: {
-		ISOMETRIC_DIAMOND :'isometric',
+		ISOMETRIC_DIAMOND   :'isometric',
 		ISOMETRIC_STAGGERED :'staggered',
-		ORTHOGONAL			:'orthogonal',
+		ORTHOGONAL          :'orthogonal',
 	},
 
 	/**
@@ -43,7 +43,7 @@ MockModule = {
 		this._renderMethod = renderMethod;
 		this._source = source;
 
-			return this;
+		return this;
 	},
 
 	/**
@@ -70,21 +70,18 @@ MockModule = {
 	createMockEntitiesInLayer: function( layer ){
 
 		var entities = [];
+		// If the layer has data field it is a Tile layer.
 		if (layer.data) {
 			var indexes = this.getIndexes( layer );
 			for(var i = 0; i < indexes.length; i++){
 				if( layer.data[indexes[i]] == 0 ){
-					if (layer.name == 'Ground') {
-						entities.push(this.createMockEmpty(layer, indexes[i]));
-					} else {
-						entities.push(0);
-					}
+					entities.push(0);
 				}else{
 					entities.push(this.createMockEntity(layer, indexes[i]));
 				}
 			}
 		}
-
+		// If the layer has the objects field it's an object layer.
 		if (layer.objects) {
 			entities = layer.objects.map(function (obj) {
 				return this.createMockArea(layer, obj);
@@ -99,15 +96,15 @@ MockModule = {
 	* @param {Object} layer
 	* @return {Array} indexes - [0,1,10,11,12,15,20,21,22,23,24,25,26]
 	*/
-		getIndexes:function( layer ){
-			var idxs = [];
+	getIndexes:function( layer ){
+		var idxs = [];
 
-			for(var row = this._startRow ; row < (this._startRow + this._viewHeight); row++ ){
-				var indexOfStartTile = this.getTileIndex(row, this._startColumn, layer);
-				idxs = idxs.concat(	this.makeSequence(indexOfStartTile, indexOfStartTile + this._viewWidth));
-			}
-			return idxs;
-		},
+		for(var row = this._startRow ; row < (this._startRow + this._viewHeight); row++ ){
+			var indexOfStartTile = this.getTileIndex(row, this._startColumn, layer);
+			idxs = idxs.concat(this.makeSequence(indexOfStartTile, indexOfStartTile + this._viewWidth));
+		}
+		return idxs;
+	},
 
 		/*
 	 * Create MockEntity
@@ -122,25 +119,14 @@ MockModule = {
 		var mock = {
 			type: "Tile",
 			head: ["2D", this._renderMethod, "Tile", "Tile" + layer.data[dataIndex], layer.name].join(','),
-			properties: layer.properties,
-		};
-		this.setPosition( column, row, mock );
-		return mock;
-	},
-
-	createMockEmpty:function( layer, dataIndex){
-		var column = dataIndex % layer.width;
-		var row = Math.floor((dataIndex / layer.width));
-		var mock = {
-			type: "Empty",
-			head: ["2D", this._renderMethod, "Tile", "TileEmpty", layer.name].join(','),
-			properties: layer.properties,
+			properties: layer.properties
 		};
 		this.setPosition( column, row, mock );
 		return mock;
 	},
 
 	createMockArea: function (layer, object) {
+		// Clones the object.
 		var mock = Object.create(object);
 		mock.head = ['2D', 'Area', layer.name, object.type, object.name].join(',');
 		mock.type = 'Object';
@@ -220,7 +206,7 @@ MockModule = {
 	px2pos:function( left, top, source){
 		return{
 			x:-Math.ceil(-left / source.tilewidth - (top%2) * 0.5),
-						y:top / source.tileheight * 2
+			y:top / source.tileheight * 2
 		};
 	},
 };
