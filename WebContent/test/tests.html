@@ -3,8 +3,8 @@
 	<head>
 	 	<meta charset="utf-8">
 		<script src="http://code.jquery.com/jquery-latest.js"></script>
-		<link rel="stylesheet" href="http://code.jquery.com/qunit/git/qunit.css" type="text/css" media="screen" />
-		<script type="text/javascript" src="http://code.jquery.com/qunit/git/qunit.js"></script>							
+		<link rel="stylesheet" href="http://code.jquery.com/qunit/qunit-1.14.0.css" type="text/css" media="screen" />
+		<script type="text/javascript" src="http://code.jquery.com/qunit/qunit-1.14.0.js"></script>							
 		<script src="../libs/crafty.js"></script>
 		<script src="source.js"></script>
 		<script src="../modules/create_mocks_module.js"></script>
@@ -105,7 +105,8 @@
 			test("createMockEntity", function() {							
 				MockModule.init( 0, 0, getSourceOrhogonal().width, getSourceOrhogonal().height, "DOM", getSourceOrhogonal());	
 				
-				equal( MockModule.createMockEntity( getSourceOrhogonal().layers[2], 12).head, "2D,DOM,Tile4,obstacles"); 
+				equal( MockModule.createMockEntity(
+						getSourceOrhogonal().layers[2], 12).head, "2D,DOM,Tile,Tile4,obstacles"); 
 				equal( MockModule.createMockEntity( getSourceOrhogonal().layers[2], 12).x, 64, "X position");	
 				equal( MockModule.createMockEntity( getSourceOrhogonal().layers[2], 12).y, 32, "Y position");					
 			});

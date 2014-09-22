@@ -310,13 +310,52 @@ Crafty.c("TiledMapBuilder", {
     			 var mockEntity = mockEntities[layer][idx];
     			 if( mockEntity == 0 ){
     				 layers[layer].push(0);
-				}else{    					    				
-					var entity = Crafty.e( mockEntity.head ).attr({ x:mockEntity.x, y:mockEntity.y });
-	    			if( isIsometric ){
-	    				isometric.place( entity.x, entity.y, 0, entity);	
-	    			}    			     			
-	    			layers[layer].push( entity );
-				}    			     			     			     			     
+    			 } else if (mockEntity.type == 'Tile') {
+    				 var entity = Crafty.e( mockEntity.head ).attr({
+    					 x: mockEntity.x,
+    					 y: mockEntity.y,
+    					 properties: mockEntity.properties,
+    				 }).setName('Tile_' + mockEntity.x + "_" + mockEntity.y);
+    				 if( isIsometric ){
+    					 isometric.place( entity.x, entity.y, 0, entity);
+    				 }
+    				 this.attach(entity);
+    				 layers[layer].push( entity );
+    			 } else if (mockEntity.type == 'Object') {
+    				 var entity = Crafty.e( mockEntity.head ).attr({
+    					 x: mockEntity.x,
+    					 y: mockEntity.y,
+    					 w: mockEntity.width,
+    					 h: mockEntity.height,
+    					 properties: mockEntity.properties,
+    				 }).setName('MapObject_' + mockEntity.x + "_" + mockEntity.y);
+    				 if (mockEntity.ellipse) {
+    					 entity.addComponent('Collision');
+    					 var radius = Math.min(mockEntity.width, mockEntity.height) / 2;
+    					 var circle = new Crafty.circle(
+    						 radius,
+    						 radius,
+    						 radius);
+    					 entity.collision(circle);
+    				 } else if (mockEntity.polygon) {
+    					 entity.addComponent('Collision');
+    					 var points = mockEntity.polygon.map(function (point) {
+    						 return [point.x, point.y];
+    					 });
+    					 entity.collision.apply(entity, points);
+    				 } else if (mockEntity.gid) {
+    					 entity.addComponent('Tile' + mockEntity.gid);
+    					 entity.addComponent(this._renderMethod);
+    					 entity.y = entity.y - entity.h;
+    					 entity.visible = true;
+    				 } else if (mockEntity.polyline) {
+    					 console.log("Lines aren't currently support well by Crafty. " +
+    					 "Please consider a different object type.");
+    				 }
+    				 this.attach(entity);
+    				 layers[layer].push(entity);
+    			 }
+    			
     		 }    		
     	}    	    	   
     	return layers;

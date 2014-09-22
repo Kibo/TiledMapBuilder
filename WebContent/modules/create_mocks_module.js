@@ -68,17 +68,23 @@ MockModule = {
 	 * @return {Array} entities		
 	 */
 	createMockEntitiesInLayer: function( layer ){			
-		var indexes = this.getIndexes( layer );
-		
 		var entities = [];
-		for(var i = 0; i < indexes.length; i++){	
-			
-			if( layer.data[indexes[i]] == 0 ){
-				entities.push(0);
-			}else{											
-				entities.push( this.createMockEntity( layer, indexes[i] ) );
-			}						
-		}				
+		if (layer.data) {
+			var indexes = this.getIndexes( layer );
+			for(var i = 0; i < indexes.length; i++){
+				if( layer.data[indexes[i]] == 0 ){
+					entities.push(0);
+				}else{
+					entities.push(this.createMockEntity(layer, indexes[i]));
+				}
+			}
+		}
+
+		if (layer.objects) {
+			entities = layer.objects.map(function (obj) {
+				return this.createMockArea(layer, obj);
+			}, this);
+		}
 		return entities;
 	},
 	
@@ -99,7 +105,7 @@ MockModule = {
     },
     
     /*
-	 * Create MockEntity
+	 * Create MockEntity for a Tile
 	 * 	
 	 * @param {Object} layer
 	 * @param {Integer} dataIndex	
@@ -108,11 +114,29 @@ MockModule = {
 	createMockEntity:function( layer, dataIndex){			
 		var column = dataIndex % layer.width;
 		var row = Math.floor((dataIndex / layer.width));								
-		var mock = {head:"2D," + this._renderMethod + ",Tile" + layer.data[dataIndex] + "," + layer.name};	
+		var mock = {
+			type: "Tile",
+			head: ["2D", this._renderMethod, "Tile", "Tile" + layer.data[dataIndex], layer.name].join(','),
+			properties: layer.properties,
+		};
 		this.setPosition( column, row, mock );				
 		return mock;
 	},
 	
+	/*
+	 * Create a MockEntity for an Object
+	 * 	
+	 * @param {Object} layer
+	 * @param {Object} object The object data from Tiled.
+	 * @return {Object} mock, {head:String, x:number, y:number} 
+	 */
+	createMockArea: function (layer, object) {
+		var mock = Object.create(object);
+		mock.head = ['2D', 'Area', layer.name, object.type, object.name].join(',');
+		mock.type = 'Object';
+		return mock;
+	},
+
 	/*
 	 * Set position of entity
 	 * 	
